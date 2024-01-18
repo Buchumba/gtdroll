@@ -1,0 +1,7 @@
+## Title: gtdroll
+## Notes: Модифицированные ролы на MS (/rms) зависит от progress-points. OS (/ros) 1-69. Transmog-roll (/rxmg) 1-50.
+## Version: 1.0
+## Author: Casta (guild "Going to death"), site: www.goingtodeath.ru, project: Turtle-wow, email: baners@mail.ru
+## Interface: 11200
+
+gtdroll.lua
