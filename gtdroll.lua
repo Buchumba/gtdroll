@@ -106,15 +106,13 @@ function SlashCmdList.GTDROLL(msg, editbox)
 	DEFAULT_CHAT_FRAME:AddMessage("Об ошибках этого аддона, пожалуйста, сообщите Casta (гильдия \"Going to Death\").",1,1,0);
 end
 
-function SlashCmdList.GTDRRMS(msg, editbox)	
-	--local _guild = ("Light Slakers");
+function SlashCmdList.GTDRRMS(msg, editbox)		
 	GTDR_SetZones()
-	local _guild = ("Going to Death");	
 	local _realNameZone = GetRealZoneText()	
 	local _guildName, _guildRankName, _guildRankIndex = GetGuildInfo("Player");
 	local _playerName = UnitName("Player");
 
-	if _guildName == _guild and GTDR_IsZone() then					
+	if GTDR_IsZone() then					
 		for i = 1, GetNumGuildMembers(1) do
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);
 			officernote = tonumber(officernote)			
