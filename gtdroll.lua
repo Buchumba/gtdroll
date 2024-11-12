@@ -39,6 +39,7 @@ function GTDR_SetZones()
 		"Ahn'Qiraj",--5
 		"Naxxramas",--6
 		"Tel'Abim",--7 debug only
+		"The Upper Necropolis"--8 (Сапфирон и Кель)
 	}
 	
   local i = GetGuildInfoText()
