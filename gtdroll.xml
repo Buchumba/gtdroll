@@ -1,7 +1,7 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">	
 	<Script file="gtdroll.lua"/>
 	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
-		<Size x="300" y="300" />
+		<Size x="300" y="310" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -103,7 +103,7 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="0" />
+							<Offset x="0" y="10" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -113,7 +113,7 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="-15" />
+							<Offset x="0" y="-5" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -123,7 +123,7 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="-30" />
+							<Offset x="0" y="-20" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -133,7 +133,7 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="10" y="70" />
+							<Offset x="10" y="90" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -143,7 +143,27 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-15" y="55" />
+							<Offset x="-15" y="75" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Автосбор 'Arcane Essence' в Kara10:">
+					<Size x="190" y="30"/>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="9" y="60" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Need 'Corrupted Sand' в BM:">
+					<Size x="190" y="30"/>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="-10" y="45" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -177,6 +197,63 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+
+			<!--настройки автолута-->
+
+			<Button inherits="UIPanelButtonTemplate" text="Да" name="GTDR_IsZG">
+				<Size x="25" y="18" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="96" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" text="Да" name="GTDR_IsAQ">
+				<Size x="25" y="18" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="81" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" text="Да"  name="GTDR_IsKara">
+				<Size x="25" y="18" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="66" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" text="Да"  name="GTDR_IsBM">
+				<Size x="25" y="18" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="51" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						
+					</OnClick>
+				</Scripts>
+			</Button>
+			<!--//настройки автолута-->	
+
 			<Button inherits="UIPanelButtonTemplate" text="Progress-points рейтинг">
 				<Size x="160" y="23" />
 				<Anchors>

@@ -54,7 +54,8 @@ end
 
 function GTDR_SetFieldFormula()
 	local _pp = math.floor(GTDR_GetOfficerNote(UnitName("player")))
-	local _text = string.format("%d*0.25 - %d*0.25+100", _pp, _pp)
+	local _fDigits = GTDR_GetDigitsF();
+	local _text = string.format("%d*%s - %d*%s+100", _pp, _fDigits[1], _pp, _fDigits[2])
 	FieldFormula:SetText("Расчет по формуле: " .. color_prefix .. _text  .. "|r")
 end
 
@@ -222,13 +223,16 @@ function GTDR_AutoRoll(id)
 	end
 	if inRaidInstance then	
 		local _, name, _, quality = GetLootRollItemInfo(id);
-		if string.find(name ,"Hakkari Bijou") or string.find(name ,"Coin") or string.find(name ,"Scarab") then
+		if (string.find(name ,"Hakkari Bijou") and GTDR_ZG_AUTONEED == 1)
+		or (string.find(name ,"Coin") and GTDR_ZG_AUTONEED == 1)
+		or (string.find(name ,"Scarab") and GTDR_AQ_AUTONEED ==1)
+		or (string.find(name ,"Arcane Essence") and GTDR_KARA_AUTONEED ==1) then
 			RollOnLoot(id, 1);
 			local _, _, _, hex = GetItemQualityColor(quality)
 			DEFAULT_CHAT_FRAME:AddMessage("GTD: Auto NEED "..hex..GetLootRollItemLink(id))
 			return
 		end
-	elseif GetRealZoneText() == "The Black Morass" then
+	elseif GetRealZoneText() == "The Black Morass" and GTDR_BM_AUTONEED == 1 then
 		local _, name, _, quality = GetLootRollItemInfo(id);
 		local nameItem = "Corrupted Sand"
 		if string.find(name , nameItem) then
