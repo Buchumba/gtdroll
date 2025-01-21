@@ -4,4 +4,4 @@
 ## Author: Casta (guild "Going to death"), site: www.goingtodeath.ru, project: Turtle-wow, email: baners@mail.ru
 ## Interface: 11200
 
-gtdroll.lua
+gtdroll.xml

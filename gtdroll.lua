@@ -13,9 +13,61 @@ SLASH_GTDRRESET1 = "/reset";
 SLASH_GTDRRESET2 = "/resetinstance";
 SLASH_GTDRRESET3 = "/resetinstances";
 SlashCmdList["GTDRRESET"] = ResetInstances;
+local text_access_error = "К сожалению у вас нет доступа для просмотра офицерской заметки. ГМ гильдии может предоставить эти права."
+local color_prefix = "|cffffffff"
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
+
+function GTD_Frame_OnLoad()	
+	this:RegisterEvent("VARIABLES_LOADED")	
+	NickNameField:SetText(UnitName("player"))	  
+	if CanViewOfficerNote() then
+		GTDR_SetFieldMyPP()
+		GTDR_SetFieldMyRoll()
+		GTDR_SetFieldFormula()
+	else
+		FieldAccessError:SetText(text_access_error)
+	end
+end
+
+function GTDR_GetMyRoll()
+	local _fDigits = GTDR_GetDigitsF();
+	local _note = GTDR_GetOfficerNote(UnitName("player"))
+	local _min = math.floor(_note * _fDigits[1])
+	local _max = math.floor(_note * _fDigits[2] + 100)					
+	if _min < 1 then
+		_min = 1;
+	end
+	return _min .. "-".._max
+end
+
+function GTDR_SetFieldMyPP()
+	local _myName = UnitName("player")   	
+	local _text = GTDR_GetOfficerNote(_myName)	
+	FieldProgressPoints:SetText("Мои progress-points: ".. color_prefix .. _text.."|r")
+end
+
+function GTDR_SetFieldMyRoll()
+	FieldRollInterval:SetText("Мой интервал рола: ".. color_prefix .. GTDR_GetMyRoll() .. "|r")
+end
+
+function GTDR_SetFieldFormula()
+	local _pp = math.floor(GTDR_GetOfficerNote(UnitName("player")))
+	local _text = string.format("%d*0.25 - %d*0.25+100", _pp, _pp)
+	FieldFormula:SetText("Расчет по формуле: " .. color_prefix .. _text  .. "|r")
+end
+
+
+function GTDR_GetOfficerNote(nickname)		
+	for y = 1, GetNumGuildMembers(1) do
+		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
+		if type(tonumber(officernote)) == "number" and name == nickname then
+			--table.insert(players, {name, tonumber(officernote), rank})		
+			return tonumber(officernote)
+		end			
+	end
+end
 
 function GTDR_Split(inputstr, sep)  
   if sep == nil then
@@ -96,6 +148,7 @@ end
 
 --помощь
 function SlashCmdList.GTDROLL(msg, editbox)
+	gtdrollFrame:Show()
 	DEFAULT_CHAT_FRAME:AddMessage("Аддон `gtdroll` гильдии \"Going to Death\". Предназначен для модифицированного рола (MS,OS,Transmg) с учетом progress-points в рейдах на 40 человек.",1,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("Список команд:",0,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("/rms - рол на мейн-спек.",1,1,1);
