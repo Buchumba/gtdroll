@@ -15,20 +15,22 @@ SLASH_GTDRRESET3 = "/resetinstances";
 SlashCmdList["GTDRRESET"] = ResetInstances;
 local text_access_error = "К сожалению у вас нет доступа для просмотра офицерской заметки. ГМ гильдии может предоставить эти права."
 local color_prefix = "|cffffffff"
+local G_SortField = "pp"--сортировка по умолчанию по progress-points все гильдии
+local P_SortField = "pp"--сортировка по умолчанию по progress-points рейда\пати
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
 
-function GTD_Frame_OnLoad()	
+function GTDR_Frame_OnLoad()	
 	this:RegisterEvent("VARIABLES_LOADED")	
 	NickNameField:SetText(UnitName("player"))	  
-	if CanViewOfficerNote() then
-		GTDR_SetFieldMyPP()
-		GTDR_SetFieldMyRoll()
-		GTDR_SetFieldFormula()
-	else
-		FieldAccessError:SetText(text_access_error)
-	end
+end
+
+local function GTDR_ShowValuesAutoneed()
+	GTDR_IsZG:SetText(GTDR_GetTitleValue(GTDR_ZG_AUTONEED))
+	GTDR_IsAQ:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED))
+	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
+	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
 end
 
 function GTDR_GetMyRoll()
@@ -38,14 +40,14 @@ function GTDR_GetMyRoll()
 	local _max = math.floor(_note * _fDigits[2] + 100)					
 	if _min < 1 then
 		_min = 1;
-	end
+	end	
 	return _min .. "-".._max
 end
 
 function GTDR_SetFieldMyPP()
 	local _myName = UnitName("player")   	
 	local _text = GTDR_GetOfficerNote(_myName)	
-	FieldProgressPoints:SetText("Мои progress-points: ".. color_prefix .. _text.."|r")
+	FieldProgressPoints:SetText("Мои progress-points: ".. color_prefix .. math.floor(_text).."|r")
 end
 
 function GTDR_SetFieldMyRoll()
@@ -55,10 +57,9 @@ end
 function GTDR_SetFieldFormula()
 	local _pp = math.floor(GTDR_GetOfficerNote(UnitName("player")))
 	local _fDigits = GTDR_GetDigitsF();
-	local _text = string.format("%d*%s - %d*%s+100", _pp, _fDigits[1], _pp, _fDigits[2])
-	FieldFormula:SetText("Расчет по формуле: " .. color_prefix .. _text  .. "|r")
+	local _text = string.format("|cffaaaaaamin:|r%d*%s,  |cffaaaaaamax:|r%d*%s+100", _pp, _fDigits[1], _pp, _fDigits[2])
+	FieldFormula:SetText("Расчет по формуле: " .. _text  .. "")
 end
-
 
 function GTDR_GetOfficerNote(nickname)		
 	for y = 1, GetNumGuildMembers(1) do
@@ -147,9 +148,62 @@ function GTDR_GetDigitsF()
   end
 end
 
---помощь
-function SlashCmdList.GTDROLL(msg, editbox)
-	gtdrollFrame:Show()
+function GTDR_SetZGAutoneed()  
+  local v = this:GetText()    
+  if not GTDR_CheckValue(v) then    
+    GTDR_ZG_AUTONEED = 1   
+  else    
+    GTDR_ZG_AUTONEED = 0   
+  end
+  this:SetText(GTDR_GetTitleValue(GTDR_ZG_AUTONEED)) 
+end
+
+function GTDR_SetAQAutoneed()  
+  local v = this:GetText()    
+  if not GTDR_CheckValue(v) then    
+    GTDR_AQ_AUTONEED = 1   
+  else    
+    GTDR_AQ_AUTONEED = 0   
+  end
+  this:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED)) 
+end
+
+function GTDR_SetKaraAutoneed()  
+  local v = this:GetText()    
+  if not GTDR_CheckValue(v) then    
+    GTDR_KARA_AUTONEED = 1   
+  else    
+    GTDR_KARA_AUTONEED = 0   
+  end
+  this:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED)) 
+end
+
+function GTDR_SetBMAutoneed()  
+  local v = this:GetText()    
+  if not GTDR_CheckValue(v) then    
+    GTDR_BM_AUTONEED = 1   
+  else    
+    GTDR_BM_AUTONEED = 0   
+  end
+  this:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED)) 
+end
+
+function GTDR_CheckValue(value)  
+  if not value or value == "off" then   
+    return nil 
+  end 
+  return true
+end
+
+function GTDR_GetTitleValue(value)
+  if value == 1 then
+    return "on"
+  else
+    return "off"
+  end
+end
+
+function GTDR_ShowHelp()
 	DEFAULT_CHAT_FRAME:AddMessage("Аддон `gtdroll` гильдии \"Going to Death\". Предназначен для модифицированного рола (MS,OS,Transmg) с учетом progress-points в рейдах на 40 человек.",1,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("Список команд:",0,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("/rms - рол на мейн-спек.",1,1,1);
@@ -159,6 +213,29 @@ function SlashCmdList.GTDROLL(msg, editbox)
 	DEFAULT_CHAT_FRAME:AddMessage("/reset, /resetinstance, /resetinstances - перезагрузка подземелий.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll - вызов справки.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("Об ошибках этого аддона, пожалуйста, сообщите Casta (гильдия \"Going to Death\").",1,1,0);
+end
+
+function SlashCmdList.GTDROLL(msg, editbox)
+	if CanViewOfficerNote() then
+		FieldAccessError:Hide()
+		GTDR_SetFieldMyPP()
+		GTDR_SetFieldMyRoll()
+		GTDR_SetFieldFormula()
+		GTDR_ShowValuesAutoneed()
+		
+		--скроем рейтинг группы\рейда если не в пати\рейде
+		if GetNumRaidMembers() == 0 and GetNumPartyMembers() == 0 then
+			ButtonRatingParty:Disable()
+		else
+			ButtonRatingParty:Enable()
+		end
+
+	else
+		FieldAccessError:Show()
+		FieldAccessError:SetText(text_access_error)
+	end
+	gtdrollFrame:Show()
+	GTDR_ShowHelp()	
 end
 
 function SlashCmdList.GTDRRMS(msg, editbox)		
@@ -254,3 +331,146 @@ gtdrEvents:SetScript("OnEvent", function()
 		GTDR_AutoRoll(arg1)
 	end
 end)
+
+--блок инициализации фрейма рейтинга для гильдии
+GTDR_G_RatingFrame = CreateFrame("Frame", "GTDR_G_RatingFrame", gtdrollFrame)
+GTDR_G_RatingFrame:SetBackdrop({
+	  bgFile="Interface\\DialogFrame\\UI-DialogBox-Background", 
+	  edgeFile="Interface\\DialogFrame\\UI-DialogBox-Border", 
+	  tile=1, tileSize=32, edgeSize=32, 
+	  insets={left=11, right=12, top=12, bottom=11}
+})
+
+GTDR_G_RatingFrame:SetMovable(true)
+GTDR_G_RatingFrame:EnableMouse(true)
+GTDR_G_RatingFrame:RegisterForDrag("LeftButton")
+GTDR_G_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
+GTDR_G_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
+GTDR_G_RatingFrame:Hide()
+
+-- Create the scrolling parent frame and size it to fit inside the texture
+local ScrollFrame = CreateFrame("ScrollFrame", "scrollFrame", GTDR_G_RatingFrame, "UIPanelScrollFrameTemplate")
+ScrollFrame:SetPoint("TOPLEFT", 13, -13)
+ScrollFrame:SetPoint("BOTTOM", 0, 11)
+ScrollFrame:SetPoint("BOTTOMRIGHT", -27, 4)
+
+local eb = CreateFrame("Editbox", "editBox", ScrollFrame)
+eb:SetMultiLine(true)
+eb:SetFontObject(ChatFontNormal)
+eb:SetWidth(230)
+scrollFrame:SetScrollChild(eb)
+--конец фрейма
+
+--блок инициализации фрейма рейтинга для пати\рейда
+GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", gtdrollFrame)
+GTDR_P_RatingFrame:SetBackdrop({
+	  bgFile="Interface\\DialogFrame\\UI-DialogBox-Background", 
+	  edgeFile="Interface\\DialogFrame\\UI-DialogBox-Border", 
+	  tile=1, tileSize=32, edgeSize=32, 
+	  insets={left=11, right=12, top=12, bottom=11}
+})
+
+GTDR_P_RatingFrame:SetMovable(true)
+GTDR_P_RatingFrame:EnableMouse(true)
+GTDR_P_RatingFrame:RegisterForDrag("LeftButton")
+GTDR_P_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
+GTDR_P_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
+GTDR_P_RatingFrame:Hide()
+-- Create the scrolling parent frame and size it to fit inside the texture
+local scrollFrameParty = CreateFrame("ScrollFrame", "scrollFrameParty", GTDR_P_RatingFrame, "UIPanelScrollFrameTemplate")
+scrollFrameParty:SetPoint("TOPLEFT", 13, -13)
+scrollFrameParty:SetPoint("BOTTOM", 0, 11)
+scrollFrameParty:SetPoint("BOTTOMRIGHT", -27, 4)
+local eb2 = CreateFrame("Editbox", nil, scrollFrameParty)
+eb2:SetMultiLine(true)
+eb2:SetFontObject(ChatFontNormal)
+eb2:SetWidth(230)
+scrollFrameParty:SetScrollChild(eb2)
+--конец фрейма
+
+--открытие или закрытие окна рейтинга гильдии или рейда
+function GTDR_OpenRatingScrollFrame(frame, checkRaid)	
+	if frame and frame:IsShown() then
+		frame:Hide()
+	else
+		GTDR_GetListRaiting(frame, checkRaid)		
+		frame:Show()
+	end	
+end
+
+--формирование данных рейтинга игроков гильдии
+function GTDR_GetListRaiting(frame, checkRaid)
+	local formula = GTDR_GetDigitsF()
+	local f, _, _ = GameFontNormal:GetFont() 	
+	local players = {}
+	local textRating = ""
+	local tempPlayers = {}
+
+	if not checkRaid then
+		frame:SetPoint("TOPLEFT", gtdrollFrame, -265, 0)
+	else
+		frame:SetPoint("TOPRIGHT", gtdrollFrame, 265, 0)
+	end
+	frame:SetWidth(270)
+	frame:SetHeight(292)
+	
+	for y = 1, GetNumGuildMembers(1) do		
+		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);		
+		if not checkRaid and type(tonumber(officernote)) == "number" then
+			table.insert(players, {name, tonumber(officernote), rank})--вся гильдия
+		elseif checkRaid and type(tonumber(officernote)) == "number" and GTDR_UnitIsRaid(name) then
+			table.insert(players, {name, tonumber(officernote), rank})--только рейд
+		end	
+	end
+	
+	tempPlayers = players
+	if G_SortField == nil or G_SortField == "pp" then
+		table.sort(tempPlayers, function(a, b) return a[2] < b[2] end)	-- 1pp < 40pp	
+	elseif G_SortField == "name" then
+		table.sort(tempPlayers, function(a, b) return a[1] > b[1] end)	-- A > Z
+	end
+    
+	local countString = table.getn(tempPlayers)
+	
+	eb:SetHeight(countString*14)--установим высоту скролла
+	
+	local _min, _max
+	for x = 1, countString do 
+		_min = math.floor(tempPlayers[x][2]*formula[1])
+		if _min < 1 then
+			_min = 1
+		end
+		_max = math.floor(tempPlayers[x][2]*formula[2]+100)
+
+		if G_SortField == "pp" then             
+			textRating = string.format("|cff00ff7f%s|r |cff0000aa- - ->|r %s (%s)   |cffFFF569(%s-%s)|r\r", tempPlayers[x][2], tempPlayers[x][1], tempPlayers[x][3], tostring(_min), tostring(_max)) .. textRating
+		elseif G_SortField == "name" then
+			textRating = string.format("|cff00ff7f%s (%s)|r |cff0000aa<- - -|r %s   |cffFFF569(%s-%s)|r\r", tempPlayers[x][1], tempPlayers[x][3], tempPlayers[x][2], tostring(_min), tostring(_max)) .. textRating			
+		end		
+	end
+
+	if G_SortField == "pp" then
+		G_SortField = "name"
+	else 
+		G_SortField = "pp"
+	end
+	
+	--запись рейтинга во фрейм скроллинга
+	if not checkRaid then
+		eb:SetText(textRating)
+	else
+		eb2:SetText(textRating)
+	end		
+end
+
+function GTDR_UnitIsRaid(name)
+	for i = 1, GetNumRaidMembers() do
+		local unit = 'raid' .. i;
+		local who = UnitName(unit);
+		if who == name then
+			return true
+		end					
+	end
+	return nil			
+end
+

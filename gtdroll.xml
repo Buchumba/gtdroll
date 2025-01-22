@@ -1,7 +1,7 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">	
 	<Script file="gtdroll.lua"/>
 	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
-		<Size x="300" y="310" />
+		<Size x="320" y="310" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -73,7 +73,7 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
-							<Offset x="0" y="-50" />
+							<Offset x="0" y="-40" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -83,7 +83,7 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
-							<Offset x="0" y="-70" />
+							<Offset x="0" y="-60" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -93,13 +93,23 @@
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
-							<Offset x="0" y="-90" />
+							<Offset x="0" y="-80" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="/rms - ролл на мейн-спек (прогресс-ролл)">
+				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/rms - ролл на мейн-спек (прогресс-ролл)">
+					<Size x="295" y="50"/>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset x="0" y="25" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/ros - ролл на офф-спек (1-70)">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
@@ -109,21 +119,11 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="/ros - ролл на офф-спек (1-70)">
+				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/rxmg - ролл на офф-спек (1-50)">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
 							<Offset x="0" y="-5" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="/rxmg - ролл на офф-спек (1-50)">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="-20" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -133,7 +133,7 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="10" y="90" />
+							<Offset x="10" y="105" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -143,7 +143,7 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-15" y="75" />
+							<Offset x="-15" y="90" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -153,7 +153,7 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="9" y="60" />
+							<Offset x="9" y="75" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -163,7 +163,17 @@
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-10" y="45" />
+							<Offset x="-10" y="60" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="Повторное нажатие на рейтинг меняет тип сортировки: pp, имя">
+					<Size x="290" y="30"/>
+					<Anchors>
+						<Anchor point="BOTTOM">
+							<Offset x="0" y="40" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -180,7 +190,8 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-  			    	    gtdrollFrame:Hide();            			
+  			    	    gtdrollFrame:Hide()
+  			    	    GTDR_G_RatingFrame:Hide()        			
           			</OnClick>
 				</Scripts>
 			</Button>
@@ -193,23 +204,22 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						--HelpButton_OnClick()
+						GTDR_ShowHelp()
 					</OnClick>
 				</Scripts>
 			</Button>
 
 			<!--настройки автолута-->
-
 			<Button inherits="UIPanelButtonTemplate" text="Да" name="GTDR_IsZG">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="96" />
+						<Offset x="-18" y="112" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						
+						GTDR_SetZGAutoneed()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -217,12 +227,12 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="81" />
+						<Offset x="-18" y="97" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						
+						GTDR_SetAQAutoneed()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -230,12 +240,12 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="66" />
+						<Offset x="-18" y="82" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						
+						GTDR_SetKaraAutoneed()
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -243,34 +253,47 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="51" />
+						<Offset x="-18" y="67" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						
+						GTDR_SetBMAutoneed()
 					</OnClick>
 				</Scripts>
 			</Button>
 			<!--//настройки автолута-->	
 
-			<Button inherits="UIPanelButtonTemplate" text="Progress-points рейтинг">
-				<Size x="160" y="23" />
+			<Button inherits="UIPanelButtonTemplate" text="PP-рейтинг гильдии">
+				<Size x="140" y="23" />
 				<Anchors>
-					<Anchor point="BOTTOM">
-						<Offset x="0" y="15" />
+					<Anchor point="BOTTOMLEFT">
+						<Offset x="18" y="20" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>
-						--GTDA_OpenRatingScrollFrame()
+					<OnClick>						
+						GTDR_OpenRatingScrollFrame(GTDR_G_RatingFrame, nil)	
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRatingParty" text="PP-рейтинг рейда">
+				<Size x="140" y="23" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="20" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>						
+						GTDR_OpenRatingScrollFrame(GTDR_P_RatingFrame, true)
 					</OnClick>
 				</Scripts>
 			</Button>	
 		</Frames>
 		<Scripts>
 			<OnLoad inherit="append">
-				GTD_Frame_OnLoad()				        
+				GTDR_Frame_OnLoad()				        
 				this:Hide()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
@@ -285,4 +308,6 @@
 			</OnDragStop>
 		</Scripts>
 	</Frame>
+	<!--конец стартового фрейма-->
+	
 </Ui>
