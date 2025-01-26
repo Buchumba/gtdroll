@@ -34,7 +34,7 @@
 		          </Anchors>
 				  <TexCoords left="0.2" right="0.8" top="0" bottom="0.6" />
 		        </Texture>
-				<FontString inherits="GameFontHighlight" font="font/MORPHEUS.TTF" text="GTDROLL">
+				<FontString inherits="GameFontHighlight" font="font/MORPHEUS.TTF" name="titleAddon" text="">
 					<Size>
 				        <AbsDimension x="0" y="0" />
 					</Size>
@@ -99,71 +99,81 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/rms - ролл на мейн-спек (прогресс-ролл)">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="rmsInfo" text="">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="25" />
+							<Offset x="0" y="33" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/ros - ролл на офф-спек (1-70)">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/ros|r - ролл на офф-спек (|cffaaaaaa1-70|r)">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="10" />
+							<Offset x="0" y="20" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="/rxmg - ролл на офф-спек (1-50)">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/rxmg|r - ролл на офф-спек (|cffaaaaaa1-50|r)">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
-							<Offset x="0" y="-5" />
+							<Offset x="0" y="8" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="Настроки автосбора в подземельях">
+					<Size x="295" y="50"/>
+					<Anchors>
+						<Anchor point="CENTER">
+							<Offset x="0" y="-15" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>	
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Автосбор 'Hakkari Bijou' и 'Coin' в ZG:">
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedZG" text="">
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="10" y="105" />
+							<Offset x="5" y="105" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Автосбор 'Scarab' в AQ20:">
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedAQ" text="">
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-15" y="90" />
+							<Offset x="-19" y="90" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Автосбор 'Arcane Essence' в Kara10:">
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedKara" text="">
 					<Size x="190" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="9" y="75" />
+							<Offset x="7" y="75" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" text="Need 'Corrupted Sand' в BM:">
-					<Size x="190" y="30"/>
+				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedBM" text="">
+					<Size x="250" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-10" y="60" />
+							<Offset x="7" y="60" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -191,7 +201,8 @@
 				<Scripts>
 					<OnClick>
   			    	    gtdrollFrame:Hide()
-  			    	    GTDR_G_RatingFrame:Hide()        			
+  			    	    GTDR_G_RatingFrame:Hide()
+  			    	    GTDR_P_RatingFrame:Hide()        			
           			</OnClick>
 				</Scripts>
 			</Button>
@@ -210,7 +221,7 @@
 			</Button>
 
 			<!--настройки автолута-->
-			<Button inherits="UIPanelButtonTemplate" text="Да" name="GTDR_IsZG">
+			<Button inherits="UIPanelButtonTemplate" text="off" name="GTDR_IsZG">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -223,7 +234,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="Да" name="GTDR_IsAQ">
+			<Button inherits="UIPanelButtonTemplate" text="off" name="GTDR_IsAQ">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -236,7 +247,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="Да"  name="GTDR_IsKara">
+			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsKara">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -249,7 +260,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="Да"  name="GTDR_IsBM">
+			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsBM">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -277,7 +288,7 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" name="ButtonRatingParty" text="PP-рейтинг рейда">
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRatingParty" text="PP-рейтинг пати\рейда">
 				<Size x="140" y="23" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
