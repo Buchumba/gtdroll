@@ -102,8 +102,8 @@
 				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="rmsInfo" text="">
 					<Size x="295" y="50"/>
 					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="33" />
+						<Anchor point="LEFT">
+							<Offset x="-40" y="33" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -112,18 +112,18 @@
 				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/ros|r - ролл на офф-спек (|cffaaaaaa1-70|r)">
 					<Size x="295" y="50"/>
 					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="20" />
+						<Anchor point="LEFT">
+							<Offset x="-43" y="20" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/rxmg|r - ролл на офф-спек (|cffaaaaaa1-50|r)">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/rxmg|r - ролл на трансмог (|cffaaaaaa1-50|r)">
 					<Size x="295" y="50"/>
 					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="8" />
+						<Anchor point="LEFT">
+							<Offset x="-40" y="8" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -216,6 +216,21 @@
 				<Scripts>
 					<OnClick>
 						GTDR_ShowHelp()
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<!--кнопка мини-фрейм-->
+			<Button name="RollFrame" inherits="UIPanelButtonTemplate" text="Roll-фрейм">
+				<Size x="80" y="30" />
+				<Anchors>
+					<Anchor point="RIGHT">
+						<Offset x="-37" y="20" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						
 					</OnClick>
 				</Scripts>
 			</Button>

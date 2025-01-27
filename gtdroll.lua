@@ -297,19 +297,22 @@ function GTDR_AutoRoll(id)
 	local  inInstance, instanceType = IsInInstance()
 	local inRaidInstance  = (instanceType == 'raid');	
 	if inRaidInstance then	
-		local _, name, _, quality = GetLootRollItemInfo(id);
-		message(name)
-		if (string.find(name , GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
+		local _, name, _, quality = GetLootRollItemInfo(id);		
+		--[[if (string.find(name , GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
 		or (string.find(name , GTDR_COIN) and GTDR_ZG_AUTONEED == 1)
 		or (string.find(name , GTDR_SCARAB) and GTDR_AQ_AUTONEED ==1)
-		or (string.find(name , GTDR_ARCANE_ESSENCE) and GTDR_KARA_AUTONEED ==1) then
+		or (string.find(name , GTDR_ARCANE_ESSENCE) and GTDR_KARA_AUTONEED ==1) then]]
+		if (name == GTDR_HAKKARI_BIJOU and GTDR_ZG_AUTONEED == 1) 
+		or (name == GTDR_COIN and GTDR_ZG_AUTONEED == 1)
+		or (name == GTDR_SCARAB and GTDR_AQ_AUTONEED ==1) 
+		or (name == GTDR_ARCANE_ESSENCE and GTDR_KARA_AUTONEED ==1) then
 			RollOnLoot(id, 1);						
 		end
 	elseif GetRealZoneText() == THE_BLACK_MORASS and GTDR_BM_AUTONEED == 1 then
 		local _, name, _, quality = GetLootRollItemInfo(id);		
-		if string.find(name , GTDR_CORRUPTED_SAND) or name == GTDR_ARCANE_ESSENCE then
-			RollOnLoot(id, 1);
-			message(name)
+		--if string.find(name , GTDR_CORRUPTED_SAND) or name == GTDR_ARCANE_ESSENCE then
+		if name == GTDR_CORRUPTED_SAND or name == GTDR_ARCANE_ESSENCE then
+			RollOnLoot(id, 1);			
 			if StaticPopup1Button1 then 
 				StaticPopup1Button1:Click()
 			end			
@@ -327,7 +330,7 @@ gtdrEvents:SetScript("OnEvent", function()
 		GTDR_AutoRoll(arg1)
 	elseif event == "ZONE_CHANGED_NEW_AREA"	then
 		local zoneName = GetRealZoneText()
-		message("Zone Name: "..zoneName)
+		--message("Zone Name: "..zoneName)
 		if zoneName == THE_BLACK_MORASS and GTDR_BM_AUTONEED == 1 then
 			GTDR_AutoLootAnnounce(THE_BLACK_MORASS, "'"..GTDR_CORRUPTED_SAND .. "' и '" .. GTDR_ARCANE_ESSENCE.."'")
 		elseif zoneName == ZUL_GURUB and GTDR_ZG_AUTONEED == 1 then
@@ -337,7 +340,7 @@ gtdrEvents:SetScript("OnEvent", function()
 end)
 
 function GTDR_AutoLootAnnounce(zoneName, textOfLoot)
-	DEFAULT_CHAT_FRAME:AddMessage("[GTD"..color_prefix_orange.."Roll|r]: Вы зашли в подземелье '"..zoneName.."' для автолута "..textOfLoot..". Для отключения этой настройки используйте команду: '/gtdroll'.")
+	DEFAULT_CHAT_FRAME:AddMessage("[GTD"..color_prefix_orange.."Roll|r]: Вы зашли в подземелье '"..zoneName.."' для автолута "..textOfLoot..". Для отключения этой настройки в окне аддона используйте команду: '/gtdroll'.")
 end
 
 
@@ -469,14 +472,13 @@ function GTDR_GetListRaiting(frame, checkRaid)
 	
 	eb:SetHeight(countString*13)--установим высоту скролла	
 	local _min, _max
-	message(countString)	
 	for x = 1, countString do 
 		_min = math.floor(tempPlayers[x][2]*formula[1])
 		
 		if _min < 1 then
 			_min = 1
 		end
-		
+
 		_max = math.floor(tempPlayers[x][2]*formula[2]+100)
 
 		if SortField == "pp" then 
