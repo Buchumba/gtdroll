@@ -323,12 +323,9 @@
 				this:Hide()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
-			</OnLoad>
-			<!--OnEvent>
-				GTDR_OnEvent()
-			</OnEvent-->
+			</OnLoad>			
 			<OnShow>
-				GTDR_OnEvent()
+				GTDR_OnShow()
 			</OnShow>
 
 			<OnDragStart>
@@ -366,7 +363,7 @@
 		</Backdrop>
 		<Layers>			
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPointsHelper" text="300">
+				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPointsHelper" text="">
 					<Size x="140" y="30"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -376,7 +373,7 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="FieldRollIntervalHelper" text="75-175">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="FieldRollIntervalHelper" text="">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -423,7 +420,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>	
-					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на мейн-спек: 75-175")</OnEnter>
+					<!--OnEnter>GTDR_ButtonRollOnLoad("Ролл на мейн-спек")</OnEnter-->
 					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_RollMs()</OnClick>
 				</Scripts>
@@ -474,6 +471,9 @@
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
 			</OnLoad>
+			<OnShow>
+				GTDR_OnShowRollFrame()
+			</OnShow>
 			<OnDragStart>
 				this:StartMoving();
 				this.isMoving = true;

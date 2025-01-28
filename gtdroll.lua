@@ -41,12 +41,24 @@ function GTDR_OnLoad()
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
-	titleAddon:SetText(GTDR_NAME_ADDON)
+	titleAddon:SetText(GTDR_NAME_ADDON)	
 end
 
-function GTDR_OnEvent()
-		GTDR_Init();
-		--DEFAULT_CHAT_FRAME:AddMessage(event..",".. tostring(arg1))
+function GTDR_OnShow()
+		--DEFAULT_CHAT_FRAME:AddMessage(event .. tostring(arg1))
+		GTDR_Init();		
+end
+
+function GTDR_OnShowRollFrame()
+	if CanViewOfficerNote() then
+		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
+		FieldRollIntervalHelper:SetText(GTDR_GetMyRoll())
+		ButtonRollMs:SetScript("OnEnter", function() 
+			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. GTDR_GetMyRoll())
+		end)
+	else
+		FieldProgressPointsHelper:SetText("|cffff6666Доступа нет")
+	end
 end
 
 function GTDR_Init()
@@ -57,6 +69,7 @@ function GTDR_Init()
 	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))	
 	if CanViewOfficerNote() then
 		FieldAccessError:Hide()
+		
 		GTDR_SetFieldMyPP()
 		GTDR_SetFieldMyRoll()
 		GTDR_SetFieldFormula()				
