@@ -318,8 +318,8 @@
 			</Button>	
 		</Frames>
 		<Scripts>
-			<OnLoad inherit="append">
-				GTDR_Frame_OnLoad()				        
+			<OnLoad>
+				GTDR_OnLoad()				        
 				this:Hide()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
@@ -338,15 +338,15 @@
 
 
 	<!--Roll-фрейм-->
-	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
-		<Size x="320" y="310" />
+	<Frame name="frameRollxml" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
+		<Size x="180" y="80" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
 		</KeyValues>
-		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"  tile="true">
 			<BackgroundInsets>
 				<AbsInset left="11" right="12" top="12" bottom="11" />
 			</BackgroundInsets>
@@ -357,180 +357,32 @@
 				<AbsValue val="32" />
 			</EdgeSize>
 		</Backdrop>
-		<Layers>
+		<Layers>			
 			<Layer level="OVERLAY">
-				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
-		          <Size>
-		            <AbsDimension x="100" y="45" />
-				  </Size>
-		          <Anchors>
-				    <Anchor point="TOP">
-		              <Offset>
-				        <AbsDimension x="0" y="18" />
-		              </Offset>
-				    </Anchor>
-		          </Anchors>
-				  <TexCoords left="0.2" right="0.8" top="0" bottom="0.6" />
-		        </Texture>
-				<FontString inherits="GameFontHighlight" font="font/MORPHEUS.TTF" name="titleAddon" text="">
-					<Size>
-				        <AbsDimension x="0" y="0" />
-					</Size>
+				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPointsHelper" text="300">
+					<Size x="140" y="30"/>
 					<Anchors>
 						<Anchor point="TOP">
-							<Offset x="0" y="0" />
+							<Offset x="0" y="-9" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontGreenLarge" font="font/MORPHEUS.TTF" name="NickNameField" text="">
-					<Size>
-				        <AbsDimension x="0" y="60" />
-					</Size>
-					<Anchors>
-						<Anchor point="TOP">
-							<Offset x="0" y="-10" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="FieldAccessError" text="">
-					<Size x="250" y="50"/>
-					<Anchors>
-						<Anchor point="TOP">
-							<Offset x="0" y="-50" />
-						</Anchor>						
-					</Anchors>					
-				</FontString>				
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPoints" text="">
+				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="FieldRollIntervalHelper" text="75-175">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
-							<Offset x="0" y="-40" />
+							<Offset x="0" y="-13" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldRollInterval" text="">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="TOP">
-							<Offset x="0" y="-60" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>	
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="FieldFormula" text="">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="TOP">
-							<Offset x="0" y="-80" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="rmsInfo" text="">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="LEFT">
-							<Offset x="-40" y="33" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/ros|r - ролл на офф-спек (|cffaaaaaa1-70|r)">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="LEFT">
-							<Offset x="-43" y="20" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/rxmg|r - ролл на трансмог (|cffaaaaaa1-50|r)">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="LEFT">
-							<Offset x="-40" y="8" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="Настроки автосбора в подземельях">
-					<Size x="295" y="50"/>
-					<Anchors>
-						<Anchor point="CENTER">
-							<Offset x="0" y="-15" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>	
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedZG" text="">
-					<Size x="190" y="30"/>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT">
-							<Offset x="5" y="105" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedAQ" text="">
-					<Size x="190" y="30"/>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT">
-							<Offset x="-19" y="90" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedKara" text="">
-					<Size x="190" y="30"/>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT">
-							<Offset x="7" y="75" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedBM" text="">
-					<Size x="250" y="30"/>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT">
-							<Offset x="7" y="60" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>
-			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="Повторное нажатие на рейтинг меняет тип сортировки: pp, имя">
-					<Size x="290" y="30"/>
-					<Anchors>
-						<Anchor point="BOTTOM">
-							<Offset x="0" y="40" />
-						</Anchor>						
-					</Anchors>
-				</FontString>
-			</Layer>			
 		</Layers>
 		<Frames>									
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeTo="gtdrollFrame" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT" relativeTo="frameRollxml" relativePoint="TOPRIGHT">
 						<Offset>
 							<AbsDimension x="-10" y="-10" />
 						</Offset>
@@ -538,127 +390,80 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-  			    	    gtdrollFrame:Hide()
-  			    	    GTDR_G_RatingFrame:Hide()
-  			    	    GTDR_P_RatingFrame:Hide()        			
+  			    	    this:GetParent():Hide()  			    	           			
           			</OnClick>
 				</Scripts>
 			</Button>
-			<Button name="HelpButton" inherits="UIPanelButtonTemplate" text="?">
+			<Button inherits="UIPanelButtonTemplate" text="!">
 				<Size x="20" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
-						<Offset x="18" y="-15" />
+						<Offset x="18" y="-16" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GTDR_ShowHelp()
+						gtdrollFrame:Show()
 					</OnClick>
 				</Scripts>
-			</Button>
+			</Button>	
 
-			<!--кнопка мини-фрейм-->
-			<Button name="RollFrame" inherits="UIPanelButtonTemplate" text="Roll-фрейм">
-				<Size x="80" y="30" />
-				<Anchors>
-					<Anchor point="RIGHT">
-						<Offset x="-37" y="20" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						
-					</OnClick>
-				</Scripts>
-			</Button>
-
-			<!--настройки автолута-->
-			<Button inherits="UIPanelButtonTemplate" text="off" name="GTDR_IsZG">
-				<Size x="25" y="18" />
-				<Anchors>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="112" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GTDR_SetZGAutoneed()
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="off" name="GTDR_IsAQ">
-				<Size x="25" y="18" />
-				<Anchors>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="97" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GTDR_SetAQAutoneed()
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsKara">
-				<Size x="25" y="18" />
-				<Anchors>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="82" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GTDR_SetKaraAutoneed()
-					</OnClick>
-				</Scripts>
-			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsBM">
-				<Size x="25" y="18" />
-				<Anchors>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="67" />
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						GTDR_SetBMAutoneed()
-					</OnClick>
-				</Scripts>
-			</Button>
-			<!--//настройки автолута-->	
-
-			<Button inherits="UIPanelButtonTemplate" text="PP-рейтинг гильдии">
-				<Size x="140" y="23" />
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRollMs" text="|cff00ff00RMS|r">
+				<Size x="35" y="20" />
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
-						<Offset x="18" y="20" />
+						<Offset x="18" y="15" />
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>						
-						GTDR_OpenRatingScrollFrame(GTDR_G_RatingFrame, nil)	
-					</OnClick>
+				<Scripts>	
+					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на мейн-спек: 75-175")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnClick>GTDR_RollMs()</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" name="ButtonRatingParty" text="PP-рейтинг пати\рейда">
-				<Size x="140" y="23" />
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRollOs" text="|cffffff33ROS|r">
+				<Size x="35" y="20" />
 				<Anchors>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="20" />
+					<Anchor point="BOTTOM">
+						<Offset x="-19" y="15" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnClick>						
-						GTDR_OpenRatingScrollFrame(GTDR_P_RatingFrame, true)
-					</OnClick>
+					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на офф-спек: 1-70")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnClick>RandomRoll(1,70);</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRollXmg" text="|cffff9999R|r|cff33ccffx|r|cffff9933m|r|cff3399ffg|r">
+				<Size x="35" y="20" />
+				<Anchors>
+					<Anchor point="BOTTOM">
+						<Offset x="18" y="15" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на трансмог: 1-50")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnClick>RandomRoll(1,50);</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" name="ButtonRollXmg" text="|cffffffff1-100">
+				<Size x="35" y="20" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="15" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnter>GTDR_ButtonRollOnLoad("Обычный ролл: 1-100")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnClick>RandomRoll(1,100)</OnClick>
 				</Scripts>
 			</Button>	
 		</Frames>
 		<Scripts>
-			<OnLoad inherit="append">
-				GTDR_Frame_OnLoad()				        
-				this:Hide()
+			<OnLoad inherit="append">								        
+				this:Show()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
 			</OnLoad>

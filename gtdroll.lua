@@ -25,20 +25,22 @@ GTDR_HAKKARI_BIJOU = "Hakkari Bijou"
 GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
+GTDR_NAME_ADDON = "GTD"..color_prefix_orange.."ROLL|r"
 
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
 
-function GTDR_Frame_OnLoad()	
-	this:RegisterEvent("VARIABLES_LOADED")	
+function GTDR_OnLoad()	
+	this:RegisterEvent("VARIABLES_LOADED")
+	this:RegisterEvent("PLAYER_LOGIN");
+	this:RegisterEvent("ADDON_LOADED");	
 	NickNameField:SetText(UnitName("player"))	  
 	fieldAutoNeedZG:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в ZG:", GTDR_HAKKARI_BIJOU, GTDR_COIN))
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
-	titleAddon:SetText(string.format("GTD%sROLL|r", color_prefix_orange))
-	--rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))
+	titleAddon:SetText(GTDR_NAME_ADDON)
 end
 
 local function GTDR_ShowValuesAutoneed()
@@ -60,9 +62,12 @@ function GTDR_GetMyRoll()
 end
 
 function GTDR_SetFieldMyPP()
-	local _myName = UnitName("player")   	
-	local _text = GTDR_GetOfficerNote(_myName)	
-	FieldProgressPoints:SetText("Мои progress-points: ".. color_prefix_white .. math.floor(_text).."|r")
+	FieldProgressPoints:SetText("Мои progress-points: ".. color_prefix_white .. GTDR_GetMyOfficerNote() .."|r")
+end
+
+function GTDR_GetMyOfficerNote()
+	local _mynote = GTDR_GetOfficerNote(UnitName("player"))
+	return math.floor(_mynote)
 end
 
 function GTDR_SetFieldMyRoll()
@@ -282,6 +287,43 @@ function SlashCmdList.GTDRRMS(msg, editbox)
 	else		 
 		RandomRoll(1,100);
 	end
+end
+
+function GTDR_RollMs()
+	GTDR_SetZones()
+	local _realNameZone = GetRealZoneText()	
+	local _guildName, _guildRankName, _guildRankIndex = GetGuildInfo("Player");
+	local _playerName = UnitName("Player");
+
+	if GTDR_IsZone() then					
+		for i = 1, GetNumGuildMembers(1) do
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);
+			officernote = tonumber(officernote)			
+			if name == _playerName then				
+				if type(officernote) == "number" then
+					local _fDigits = GTDR_GetDigitsF();
+					local _min = math.floor(officernote * _fDigits[1])
+					local _max = math.floor(officernote * _fDigits[2] + 100)					
+					if _min < 1 then
+						_min = 1;
+					end
+					RandomRoll(_min,_max);
+				else
+					RandomRoll(1,100);
+				end
+			end
+		end
+	elseif _guildName == _guild and not GTDR_IsZone() then
+		GTDR_AnnoErrorRms()
+		RandomRoll(1,100);	
+	else	
+		GTDR_AnnoErrorRms()	 
+		RandomRoll(1,100);
+	end
+end
+
+function GTDR_AnnoErrorRms()
+	DEFAULT_CHAT_FRAME:AddMessage("["..GTDR_NAME_ADDON.."]: |cFFFF8080Команда `/rms` работает только в рейдовых подземельях указанных в настройках гильдии!|r");
 end
 
 function SlashCmdList.GTDRROS(msg, editbox)
@@ -524,3 +566,19 @@ function GTDR_UnitIsParty(name)
 	return nil			
 end
 
+
+function GTDR_ButtonRollOnLoad(text)
+	GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); 
+  GameTooltip:ClearLines();
+  GameTooltip:SetText(text, 1,1,1,0.75)
+  GameTooltip:Show()
+end
+
+function GTDR_ButtonRollOnLeave()
+	 GameTooltip:Hide() 
+end
+
+function GTDR_ButtonRmsOnClick()
+	 message("roll 75-175")
+end
+                    
