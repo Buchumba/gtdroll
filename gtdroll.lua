@@ -26,7 +26,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..color_prefix_orange.."ROLL|r"
-
+local addon_loaded = nil
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
@@ -34,7 +34,8 @@ GTDR_AccessInstances = {}
 function GTDR_OnLoad()	
 	this:RegisterEvent("VARIABLES_LOADED")
 	this:RegisterEvent("PLAYER_LOGIN");
-	this:RegisterEvent("ADDON_LOADED");	
+	this:RegisterEvent("ADDON_LOADED");		
+	this:RegisterEvent("PLAYER_ENTERING_WORLD");		
 	NickNameField:SetText(UnitName("player"))	  
 	fieldAutoNeedZG:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в ZG:", GTDR_HAKKARI_BIJOU, GTDR_COIN))
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
@@ -43,22 +44,47 @@ function GTDR_OnLoad()
 	titleAddon:SetText(GTDR_NAME_ADDON)
 end
 
-local function GTDR_ShowValuesAutoneed()
+function GTDR_OnEvent()
+		GTDR_Init();
+		--DEFAULT_CHAT_FRAME:AddMessage(event..",".. tostring(arg1))
+end
+
+function GTDR_Init()
 	GTDR_IsZG:SetText(GTDR_GetTitleValue(GTDR_ZG_AUTONEED))
 	GTDR_IsAQ:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED))
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
-	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))	
+	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
+	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))	
+	if CanViewOfficerNote() then
+		FieldAccessError:Hide()
+		GTDR_SetFieldMyPP()
+		GTDR_SetFieldMyRoll()
+		GTDR_SetFieldFormula()				
+		--скроем рейтинг группы\рейда если не в пати\рейде
+		if GetNumRaidMembers() == 0 and GetNumPartyMembers() == 0 then
+			ButtonRatingParty:Disable()
+		else
+			ButtonRatingParty:Enable()
+		end
+	else
+		FieldAccessError:Show()
+		FieldAccessError:SetText(text_access_error)
+	end
 end
 
 function GTDR_GetMyRoll()
 	local _fDigits = GTDR_GetDigitsF();
 	local _note = GTDR_GetOfficerNote(UnitName("player"))
-	local _min = math.floor(_note * _fDigits[1])
-	local _max = math.floor(_note * _fDigits[2] + 100)					
-	if _min < 1 then
-		_min = 1;
-	end	
-	return _min .. "-".._max
+	if _note then
+		local _min = math.floor(_note * _fDigits[1])
+		local _max = math.floor(_note * _fDigits[2] + 100)					
+		if _min < 1 then
+			_min = 1;
+		end	
+		return _min .. "-".._max
+	else
+		return "1-100"
+	end
 end
 
 function GTDR_SetFieldMyPP()
@@ -235,24 +261,7 @@ function GTDR_ShowHelp()
 	DEFAULT_CHAT_FRAME:AddMessage("Об ошибках этого аддона, пожалуйста, сообщите Casta (гильдия \"Going to Death\").",1,1,0);
 end
 
-function SlashCmdList.GTDROLL(msg, editbox)
-	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))
-	GTDR_ShowValuesAutoneed()
-	if CanViewOfficerNote() then
-		FieldAccessError:Hide()
-		GTDR_SetFieldMyPP()
-		GTDR_SetFieldMyRoll()
-		GTDR_SetFieldFormula()				
-		--скроем рейтинг группы\рейда если не в пати\рейде
-		if GetNumRaidMembers() == 0 and GetNumPartyMembers() == 0 then
-			ButtonRatingParty:Disable()
-		else
-			ButtonRatingParty:Enable()
-		end
-	else
-		FieldAccessError:Show()
-		FieldAccessError:SetText(text_access_error)
-	end
+function SlashCmdList.GTDROLL(msg, editbox)	
 	gtdrollFrame:Show()
 	GTDR_ShowHelp()	
 end

@@ -324,6 +324,13 @@
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
 			</OnLoad>
+			<!--OnEvent>
+				GTDR_OnEvent()
+			</OnEvent-->
+			<OnShow>
+				GTDR_OnEvent()
+			</OnShow>
+
 			<OnDragStart>
 				this:StartMoving();
 				this.isMoving = true;
