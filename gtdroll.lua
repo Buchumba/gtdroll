@@ -42,10 +42,10 @@ function GTDR_OnLoad()
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
 	titleAddon:SetText(GTDR_NAME_ADDON)	
+	
 end
 
 function GTDR_OnShow()
-		--DEFAULT_CHAT_FRAME:AddMessage(event .. tostring(arg1))
 		GTDR_Init();		
 end
 
@@ -54,10 +54,11 @@ function GTDR_OnShowRollFrame()
 		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
 		FieldRollIntervalHelper:SetText(GTDR_GetMyRoll())
 		ButtonRollMs:SetScript("OnEnter", function() 
+			GTDR_OnShowRollFrame()
 			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. GTDR_GetMyRoll())
 		end)
 	else
-		FieldProgressPointsHelper:SetText("|cffff6666Доступа нет")
+		FieldProgressPointsHelper:SetText("...")
 	end
 end
 
@@ -68,8 +69,7 @@ function GTDR_Init()
 	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
 	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))	
 	if CanViewOfficerNote() then
-		FieldAccessError:Hide()
-		
+		FieldAccessError:Hide()			
 		GTDR_SetFieldMyPP()
 		GTDR_SetFieldMyRoll()
 		GTDR_SetFieldFormula()				
@@ -361,15 +361,11 @@ function GTDR_AutoRoll(id)
 	local  inInstance, instanceType = IsInInstance()
 	local inRaidInstance  = (instanceType == 'raid');	
 	if inRaidInstance then	
-		local _, name, _, quality = GetLootRollItemInfo(id);		
-		--[[if (string.find(name , GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
+		local _, name, _, quality = GetLootRollItemInfo(id);			
+		if (string.find(name , GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
 		or (string.find(name , GTDR_COIN) and GTDR_ZG_AUTONEED == 1)
 		or (string.find(name , GTDR_SCARAB) and GTDR_AQ_AUTONEED ==1)
-		or (string.find(name , GTDR_ARCANE_ESSENCE) and GTDR_KARA_AUTONEED ==1) then]]
-		if (name == GTDR_HAKKARI_BIJOU and GTDR_ZG_AUTONEED == 1) 
-		or (name == GTDR_COIN and GTDR_ZG_AUTONEED == 1)
-		or (name == GTDR_SCARAB and GTDR_AQ_AUTONEED ==1) 
-		or (name == GTDR_ARCANE_ESSENCE and GTDR_KARA_AUTONEED ==1) then
+		or (name == GTDR_ARCANE_ESSENCE and GTDR_KARA_AUTONEED ==1) then		
 			RollOnLoot(id, 1);						
 		end
 	elseif GetRealZoneText() == THE_BLACK_MORASS and GTDR_BM_AUTONEED == 1 then
@@ -588,8 +584,7 @@ function GTDR_UnitIsParty(name)
 	return nil			
 end
 
-
-function GTDR_ButtonRollOnLoad(text)
+function GTDR_ButtonRollOnLoad(text)	
 	GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); 
   GameTooltip:ClearLines();
   GameTooltip:SetText(text, 1,1,1,0.75)
@@ -600,7 +595,3 @@ function GTDR_ButtonRollOnLeave()
 	 GameTooltip:Hide() 
 end
 
-function GTDR_ButtonRmsOnClick()
-	 message("roll 75-175")
-end
-                    

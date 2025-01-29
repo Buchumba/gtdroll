@@ -230,7 +230,13 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						
+						if frameRollxml:IsShown() then
+							GTDR_ShowMiniFrame = 0
+							frameRollxml:Hide()
+						else
+							GTDR_ShowMiniFrame = 1
+							frameRollxml:Show()
+						end
 					</OnClick>
 				</Scripts>
 			</Button>
@@ -394,7 +400,8 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-  			    	    this:GetParent():Hide()  			    	           			
+  			    	    this:GetParent():Hide()
+  			    	    GTDR_ShowMiniFrame = 0  			    	           			
           			</OnClick>
 				</Scripts>
 			</Button>
@@ -409,6 +416,7 @@
 					<OnClick>
 						gtdrollFrame:Show()
 					</OnClick>
+					<OnEnter>GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>
 				</Scripts>
 			</Button>	
 
@@ -419,8 +427,7 @@
 						<Offset x="18" y="15" />
 					</Anchor>
 				</Anchors>
-				<Scripts>	
-					<!--OnEnter>GTDR_ButtonRollOnLoad("Ролл на мейн-спек")</OnEnter-->
+				<Scripts>						
 					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_RollMs()</OnClick>
 				</Scripts>
@@ -466,14 +473,17 @@
 			</Button>	
 		</Frames>
 		<Scripts>
-			<OnLoad inherit="append">								        
+			<OnLoad inherit="prepend">								        
 				this:Show()
 				this:RegisterForDrag("LeftButton");
-				this:SetMovable(1);
+				this:SetMovable(1);				
 			</OnLoad>
 			<OnShow>
 				GTDR_OnShowRollFrame()
-			</OnShow>
+			</OnShow>			
+			<OnEnter>
+				GTDR_OnShowRollFrame()
+			</OnEnter>
 			<OnDragStart>
 				this:StartMoving();
 				this.isMoving = true;
