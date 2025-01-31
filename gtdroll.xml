@@ -336,8 +336,6 @@
 		</Scripts>
 	</Frame>
 	<!--конец стартового фрейма-->
-
-
 	<!--Roll-фрейм-->
 	<Frame name="FrameRollxml" parent="UIParent" toplevel="true" movable="true" hidden="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
 		<Size x="180" y="80" />
