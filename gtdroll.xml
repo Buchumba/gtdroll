@@ -1,5 +1,5 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">	
-	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" hidden="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
+	<Frame name="GtdRollFrame" parent="UIParent" toplevel="true" hidden="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
 		<Size x="320" y="310" />
 		<Anchors>
 			<Anchor point="CENTER" />
@@ -191,7 +191,7 @@
 		<Frames>									
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeTo="gtdrollFrame" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT" relativeTo="GtdRollFrame" relativePoint="TOPRIGHT">
 						<Offset>
 							<AbsDimension x="-10" y="-10" />
 						</Offset>
@@ -199,7 +199,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-  			    	    gtdrollFrame:Hide()  			    	    
+  			    	    GtdRollFrame:Hide()  			    	    
   			    	    GTDR_G_RatingFrame:Hide()
   			    	    GTDR_P_RatingFrame:Hide()        			
           			</OnClick>          			
@@ -405,10 +405,10 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						if gtdrollFrame:IsShown() then 
-							gtdrollFrame:Hide()
+						if GtdRollFrame:IsShown() then 
+							GtdRollFrame:Hide()
 						else
-							gtdrollFrame:Show()
+							GtdRollFrame:Show()
 						end		
 					</OnClick>
 					<OnEnter>GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>

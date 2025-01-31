@@ -2,6 +2,7 @@
 --По всем вопросам аддона обращайтесь к Casta\Madarra ("Going to Death" | WOW-Turtle)
 
 SLASH_GTDROLL1 = "/gtdroll";--help
+SLASH_GTDROLLHELP1 = "/gtdrollhelp";--help
 SLASH_GTDRRMS1 = "/rms";--roll ms
 SLASH_GTDRROS1 = "/ros";--roll os
 SLASH_GTDRRXMG1 = "/rxmg";--roll transmog
@@ -283,13 +284,25 @@ function GTDR_ShowHelp()
 	DEFAULT_CHAT_FRAME:AddMessage("/rxmg - рол на трансмог (1-50).",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/reload - перезагрузка интерфейса.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/reset, /resetinstance, /resetinstances - перезагрузка подземелий.",1,1,1);
-	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll - вызов справки.",1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll - основное окно аддона.",1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll mini - вызов мини-фрейма.",1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll help - вызов справки.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("Об ошибках этого аддона, пожалуйста, сообщите Casta (гильдия \"Going to Death\").",1,1,0);
 end
 
 function SlashCmdList.GTDROLL(msg, editbox)	
-	gtdrollFrame:Show()
-	GTDR_ShowHelp()	
+	if msg == "mini" then  -- мини-фрейм
+		FrameRollxml:Show()
+		GTDR_ShowMiniFrame = 1 
+	elseif msg ==  "help" then -- помощь
+		GTDR_ShowHelp()
+	else
+		GtdRollFrame:Show()	-- основное окно настроек
+	end
+end
+
+function SlashCmdList.GTDROLLHELP(msg, editbox)	
+		GTDR_ShowHelp()	
 end
 
 function SlashCmdList.GTDRRMS(msg, editbox)		
@@ -420,9 +433,8 @@ function GTDR_AutoLootAnnounce(zoneName, textOfLoot)
 	DEFAULT_CHAT_FRAME:AddMessage("[GTD"..color_prefix_orange.."Roll|r]: Вы зашли в подземелье '"..zoneName.."' для автолута "..textOfLoot..". Для отключения этой настройки в окне аддона используйте команду: '/gtdroll'.")
 end
 
-
 --блок инициализации фрейма рейтинга для гильдии
-GTDR_G_RatingFrame = CreateFrame("Frame", "GTDR_G_RatingFrame", gtdrollFrame)
+GTDR_G_RatingFrame = CreateFrame("Frame", "GTDR_G_RatingFrame", GtdRollFrame)
 GTDR_G_RatingFrame:SetBackdrop({
 	  bgFile="Interface\\DialogFrame\\UI-DialogBox-Background", 
 	  edgeFile="Interface\\DialogFrame\\UI-DialogBox-Border", 
@@ -463,7 +475,7 @@ scrollFrame:SetScrollChild(eb)
 --конец фрейма
 
 --блок инициализации фрейма рейтинга для пати\рейда
-GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", gtdrollFrame)
+GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", GtdRollFrame)
 GTDR_P_RatingFrame:SetBackdrop({
 	  bgFile="Interface\\DialogFrame\\UI-DialogBox-Background", 
 	  edgeFile="Interface\\DialogFrame\\UI-DialogBox-Border", 
@@ -520,9 +532,9 @@ function GTDR_GetListRaiting(frame, checkRaid)
 	local tempPlayers = {}
 
 	if not checkRaid then
-		frame:SetPoint("TOPLEFT", gtdrollFrame, -265, 0)
+		frame:SetPoint("TOPLEFT", GtdRollFrame, -265, 0)
 	else
-		frame:SetPoint("TOPRIGHT", gtdrollFrame, 265, 0)
+		frame:SetPoint("TOPRIGHT", GtdRollFrame, 265, 0)
 	end
 	frame:SetWidth(270)
 	frame:SetHeight(292)
