@@ -1,6 +1,5 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">	
-	<Script file="gtdroll.lua"/>
-	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
+	<Frame name="gtdrollFrame" parent="UIParent" toplevel="true" hidden="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
 		<Size x="320" y="310" />
 		<Anchors>
 			<Anchor point="CENTER" />
@@ -129,7 +128,7 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="Настроки автосбора в подземельях">
+				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="Настройки автосбора в подземельях">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
@@ -200,10 +199,10 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-  			    	    gtdrollFrame:Hide()
+  			    	    gtdrollFrame:Hide()  			    	    
   			    	    GTDR_G_RatingFrame:Hide()
   			    	    GTDR_P_RatingFrame:Hide()        			
-          			</OnClick>
+          			</OnClick>          			
 				</Scripts>
 			</Button>
 			<Button name="HelpButton" inherits="UIPanelButtonTemplate" text="?">
@@ -221,23 +220,16 @@
 			</Button>
 
 			<!--кнопка мини-фрейм-->
-			<Button name="RollFrame" inherits="UIPanelButtonTemplate" text="Roll-фрейм">
+			<Button name="ButtonOpenMiniFrame" inherits="UIPanelButtonTemplate" text="мини-фрейм">
 				<Size x="80" y="30" />
 				<Anchors>
 					<Anchor point="RIGHT">
 						<Offset x="-37" y="20" />
 					</Anchor>
 				</Anchors>
-				<Scripts>
-					<OnClick>
-						if frameRollxml:IsShown() then
-							GTDR_ShowMiniFrame = 0
-							frameRollxml:Hide()
-						else
-							GTDR_ShowMiniFrame = 1
-							frameRollxml:Show()
-						end
-					</OnClick>
+				<Scripts>					
+					<OnEnter>GTDR_ButtonRollOnLoad("Вспомогательный фрейм для роллов")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>
 
@@ -325,15 +317,14 @@
 		</Frames>
 		<Scripts>
 			<OnLoad>
-				GTDR_OnLoad()				        
-				this:Hide()
+				GTDR_OnLoad()
+				--this:Show()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
 			</OnLoad>			
 			<OnShow>
 				GTDR_OnShow()
 			</OnShow>
-
 			<OnDragStart>
 				this:StartMoving();
 				this.isMoving = true;
@@ -348,7 +339,7 @@
 
 
 	<!--Roll-фрейм-->
-	<Frame name="frameRollxml" parent="UIParent" toplevel="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
+	<Frame name="FrameRollxml" parent="UIParent" toplevel="true" movable="true" hidden="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
 		<Size x="180" y="80" />
 		<Anchors>
 			<Anchor point="CENTER" />
@@ -392,7 +383,7 @@
 		<Frames>									
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
 				<Anchors>
-					<Anchor point="TOPRIGHT" relativeTo="frameRollxml" relativePoint="TOPRIGHT">
+					<Anchor point="TOPRIGHT" relativeTo="FrameRollxml" relativePoint="TOPRIGHT">
 						<Offset>
 							<AbsDimension x="-10" y="-10" />
 						</Offset>
@@ -414,9 +405,14 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						gtdrollFrame:Show()
+						if gtdrollFrame:IsShown() then 
+							gtdrollFrame:Hide()
+						else
+							gtdrollFrame:Show()
+						end		
 					</OnClick>
 					<OnEnter>GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>
+					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>	
 
@@ -428,6 +424,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>						
+					<!--OnEnter>GTDR_MiniInit()</OnEnter-->
 					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_RollMs()</OnClick>
 				</Scripts>
@@ -473,16 +470,15 @@
 			</Button>	
 		</Frames>
 		<Scripts>
-			<OnLoad inherit="prepend">								        
-				this:Show()
+			<OnLoad>
 				this:RegisterForDrag("LeftButton");
-				this:SetMovable(1);				
+				this:SetMovable(1);
 			</OnLoad>
 			<OnShow>
-				GTDR_OnShowRollFrame()
+				GTDR_MiniInit()
 			</OnShow>			
 			<OnEnter>
-				GTDR_OnShowRollFrame()
+				GTDR_MiniInit()
 			</OnEnter>
 			<OnDragStart>
 				this:StartMoving();

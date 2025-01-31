@@ -5,4 +5,5 @@
 ## Interface: 11200
 ## SavedVariablesPerCharacter: GTDR_ZG_AUTONEED, GTDR_AQ_AUTONEED, GTDR_BM_AUTONEED, GTDR_KARA_AUTONEED, GTDR_ShowMiniFrame
 
+gtdroll.lua
 gtdroll.xml

@@ -26,11 +26,25 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..color_prefix_orange.."ROLL|r"
-local addon_loaded = nil
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
 
+--мини-фрейм
+function GTDR_MiniInit()
+	if CanViewOfficerNote() then
+		local _roll = GTDR_GetMyRoll()
+		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
+		FieldRollIntervalHelper:SetText(GTDR_GetMyRoll())
+		ButtonRollMs:SetScript("OnEnter", function() 	
+			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. GTDR_GetMyRoll())
+		end)
+	else
+		FieldProgressPointsHelper:SetText("...")
+	end
+end
+
+--основной фрейм
 function GTDR_OnLoad()	
 	this:RegisterEvent("VARIABLES_LOADED")
 	this:RegisterEvent("PLAYER_LOGIN");
@@ -42,27 +56,23 @@ function GTDR_OnLoad()
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
 	titleAddon:SetText(GTDR_NAME_ADDON)	
-	
 end
 
 function GTDR_OnShow()
 		GTDR_Init();		
 end
 
-function GTDR_OnShowRollFrame()
-	if CanViewOfficerNote() then
-		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
-		FieldRollIntervalHelper:SetText(GTDR_GetMyRoll())
-		ButtonRollMs:SetScript("OnEnter", function() 
-			GTDR_OnShowRollFrame()
-			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. GTDR_GetMyRoll())
-		end)
-	else
-		FieldProgressPointsHelper:SetText("...")
-	end
-end
-
 function GTDR_Init()
+	ButtonOpenMiniFrame:SetScript("OnClick", function()
+		if FrameRollxml:IsShown() then
+			GTDR_ShowMiniFrame = 0
+			FrameRollxml:Hide()
+		else
+			GTDR_MiniInit()
+			GTDR_ShowMiniFrame = 1
+			FrameRollxml:Show()
+		end
+	end)	
 	GTDR_IsZG:SetText(GTDR_GetTitleValue(GTDR_ZG_AUTONEED))
 	GTDR_IsAQ:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED))
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
@@ -106,7 +116,10 @@ end
 
 function GTDR_GetMyOfficerNote()
 	local _mynote = GTDR_GetOfficerNote(UnitName("player"))
-	return math.floor(_mynote)
+	if _mynote then
+		return math.floor(_mynote)
+	end
+	return ""
 end
 
 function GTDR_SetFieldMyRoll()
@@ -384,8 +397,12 @@ end
 local gtdrEvents = CreateFrame("frame")
 gtdrEvents:RegisterEvent("START_LOOT_ROLL")
 gtdrEvents:RegisterEvent("LOOT_BIND_CONFIRM")
+gtdrEvents:RegisterEvent("PLAYER_LOGIN")
 gtdrEvents:RegisterEvent("ZONE_CHANGED_NEW_AREA")
 gtdrEvents:SetScript("OnEvent", function()	
+	if event == "PLAYER_LOGIN" and (GTDR_ShowMiniFrame == 1 or GTDR_ShowMiniFrame == nil) then			
+		FrameRollxml:Show()		
+	end
 	if event == "START_LOOT_ROLL" then
 		GTDR_AutoRoll(arg1)
 	elseif event == "ZONE_CHANGED_NEW_AREA"	then
