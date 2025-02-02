@@ -1,6 +1,6 @@
 # Аддон гильдии "Going to Death" проекта WOW-Turtle.
 ## gtdroll: основные команды...
-<b>/gtdroll</b> - вызов освновного окна аддона.<br>
+<b>/gtdroll</b> - вызов основного окна аддона.<br>
 <b>/gtdroll mini</b> - вызов вспомогательного мини-фрейма.<br>
 <b>/gtdroll help</b> - вызов справки по аддону<br>
 <b>/rms</b> - бросок на мейнс-спек по прогресс-роллу, учитывающему ваши progress-points, начисляемые специальным аддоном <a href="https://github.com/Buchumba/gtd_admin">gtd_admin</a> у Рейд-лидера.<br>
