@@ -321,7 +321,12 @@
 				--this:Show()
 				this:RegisterForDrag("LeftButton");
 				this:SetMovable(1);
-			</OnLoad>			
+				--закрытие по ESC
+				tinsert(UISpecialFrames, this:GetName());
+				tinsert(UISpecialFrames, "GTDR_G_RatingFrame");
+				tinsert(UISpecialFrames, "GTDR_P_RatingFrame");
+				--
+			</OnLoad>	
 			<OnShow>
 				GTDR_OnShow()
 			</OnShow>

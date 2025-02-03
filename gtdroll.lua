@@ -57,6 +57,7 @@ function GTDR_OnLoad()
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
 	titleAddon:SetText(GTDR_NAME_ADDON)	
+
 end
 
 function GTDR_OnShow()
@@ -441,7 +442,6 @@ GTDR_G_RatingFrame:SetBackdrop({
 	  tile=1, tileSize=32, edgeSize=32, 
 	  insets={left=11, right=12, top=12, bottom=11}
 })
-
 --заголовок 1
 local RaitingGuildHeader = CreateFrame("Frame", "raitingHeader", GTDR_G_RatingFrame)
 RaitingGuildHeader:SetPoint("TOP", GTDR_G_RatingFrame, "TOP", 0, 12)
@@ -454,10 +454,10 @@ local RaitingGuildHeaderString = RaitingGuildHeader:CreateFontString(nil, "OVERL
 RaitingGuildHeaderString:SetPoint("CENTER", RaitingGuildHeader, "CENTER", 0, 12)
 RaitingGuildHeaderString:SetText("Рейтинг гильдии")
 
-GTDR_G_RatingFrame:SetMovable(true)
+--GTDR_G_RatingFrame:SetMovable(true)
 GTDR_G_RatingFrame:EnableMouse(true)
 GTDR_G_RatingFrame:RegisterForDrag("LeftButton")
-GTDR_G_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
+--GTDR_G_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
 GTDR_G_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
 GTDR_G_RatingFrame:Hide()
 
@@ -467,13 +467,14 @@ ScrollFrame:SetPoint("TOPLEFT", 14, -27)
 ScrollFrame:SetPoint("BOTTOM", 0, 14)
 ScrollFrame:SetPoint("BOTTOMRIGHT", -37, 4)
 
-local eb = CreateFrame("Editbox", "editBox", ScrollFrame)
+local eb = CreateFrame("Editbox", nil, ScrollFrame)
 eb:SetMultiLine(true)
 eb:SetFontObject(GameFontHighlightSmall)
 eb:SetWidth(230)
 eb:SetAutoFocus(false)
 scrollFrame:SetScrollChild(eb)
 --конец фрейма
+
 
 --блок инициализации фрейма рейтинга для пати\рейда
 GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", GtdRollFrame)
@@ -483,7 +484,6 @@ GTDR_P_RatingFrame:SetBackdrop({
 	  tile=1, tileSize=32, edgeSize=32, 
 	  insets={left=11, right=12, top=12, bottom=11}
 })
-
 --заголовок 2
 local RaitingRaidHeader = CreateFrame("Frame", "raitingHeader", GTDR_P_RatingFrame)
 RaitingRaidHeader:SetPoint("TOP", GTDR_P_RatingFrame, "TOP", 0, 12)
@@ -496,10 +496,10 @@ local RaitingRaidHeaderString = RaitingRaidHeader:CreateFontString(nil, "OVERLAY
 RaitingRaidHeaderString:SetPoint("CENTER", RaitingRaidHeader, "CENTER", 0, 12)
 RaitingRaidHeaderString:SetText("Рейтинг вашего рейда или группы")
 
-GTDR_P_RatingFrame:SetMovable(true)
+--GTDR_P_RatingFrame:SetMovable(true)
 GTDR_P_RatingFrame:EnableMouse(true)
 GTDR_P_RatingFrame:RegisterForDrag("LeftButton")
-GTDR_P_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
+--GTDR_P_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
 GTDR_P_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
 GTDR_P_RatingFrame:Hide()
 -- Create the scrolling parent frame and size it to fit inside the texture
@@ -539,7 +539,7 @@ function GTDR_GetListRaiting(frame, checkRaid)
 		frame:SetPoint("TOPRIGHT", GtdRollFrame, 265, 0)
 	end
 	frame:SetWidth(270)
-	frame:SetHeight(292)
+	frame:SetHeight(329)
 	
 	for y = 1, GetNumGuildMembers(1) do		
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
@@ -561,7 +561,9 @@ function GTDR_GetListRaiting(frame, checkRaid)
     
 	local countString = table.getn(tempPlayers)
 	
-	eb:SetHeight(countString*13)--установим высоту скролла	
+	eb:SetHeight(countString*13)--установим высоту скролла для гильдии	
+	eb2:SetHeight(countString*13)--установим высоту скролла для пати\рейда
+	
 	local _min, _max
 	for x = 1, countString do 
 		_min = math.floor(tempPlayers[x][2]*formula[1])
