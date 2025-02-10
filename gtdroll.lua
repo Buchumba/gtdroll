@@ -37,12 +37,11 @@ function GTDR_MiniInit()
 	if CanViewOfficerNote() then
 		local _roll = GTDR_GetMyRoll(nil)
 		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
-		FieldRollIntervalHelper:SetText(_roll)
+		FieldRollIntervalHelper:SetText(_roll)		
 		ButtonRollMs:SetScript("OnEnter", function() 	
 			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. _roll)
 		end)
-		ButtonRollOs:SetScript("OnEnter", function() 	
-			
+		ButtonRollOs:SetScript("OnEnter", function()
 			GTDR_ButtonRollOnLoad("Ролл на офф-спек: " .. GTDR_GetMyRoll(true))
 		end)
 	else
@@ -85,6 +84,7 @@ function GTDR_Init()
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
 	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
 	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(nil)))	
+	rosInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на офф-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(true)))	
 	if CanViewOfficerNote() then
 		FieldAccessError:Hide()			
 		GTDR_SetFieldMyPP()

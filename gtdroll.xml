@@ -108,7 +108,7 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/ros|r - ролл на офф-спек (|cffaaaaaa1-70|r)">
+				<FontString inherits="GameFontDisableSmall" name="rosInfo" font="font/MORPHEUS.TTF"  text="">
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="LEFT">
