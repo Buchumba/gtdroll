@@ -426,10 +426,9 @@
 						<Offset x="18" y="15" />
 					</Anchor>
 				</Anchors>
-				<Scripts>						
-					<!--OnEnter>GTDR_MiniInit()</OnEnter-->
+				<Scripts>
 					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
-					<OnClick>GTDR_RollMs()</OnClick>
+					<OnClick>GTDR_Roll(nil)</OnClick>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollOs" text="|cffffff33ROS|r">
@@ -440,9 +439,9 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на офф-спек: 1-70")</OnEnter>
+					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на офф-спек")</OnEnter>
 					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
-					<OnClick>RandomRoll(1,70);</OnClick>
+					<OnClick>GTDR_Roll(true)</OnClick>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollXmg" text="|cffff9999R|r|cff33ccffx|r|cffff9933m|r|cff3399ffg|r">

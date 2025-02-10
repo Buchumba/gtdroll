@@ -35,11 +35,15 @@ GTDR_AccessInstances = {}
 --мини-фрейм
 function GTDR_MiniInit()
 	if CanViewOfficerNote() then
-		local _roll = GTDR_GetMyRoll()
+		local _roll = GTDR_GetMyRoll(nil)
 		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
-		FieldRollIntervalHelper:SetText(GTDR_GetMyRoll())
+		FieldRollIntervalHelper:SetText(_roll)
 		ButtonRollMs:SetScript("OnEnter", function() 	
-			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. GTDR_GetMyRoll())
+			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. _roll)
+		end)
+		ButtonRollOs:SetScript("OnEnter", function() 	
+			
+			GTDR_ButtonRollOnLoad("Ролл на офф-спек: " .. GTDR_GetMyRoll(true))
 		end)
 	else
 		FieldProgressPointsHelper:SetText("...")
@@ -80,7 +84,7 @@ function GTDR_Init()
 	GTDR_IsAQ:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED))
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
 	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
-	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll()))	
+	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(nil)))	
 	if CanViewOfficerNote() then
 		FieldAccessError:Hide()			
 		GTDR_SetFieldMyPP()
@@ -98,9 +102,12 @@ function GTDR_Init()
 	end
 end
 
-function GTDR_GetMyRoll()
+function GTDR_GetMyRoll(isRos)
 	local _fDigits = GTDR_GetDigitsF();
 	local _note = GTDR_GetOfficerNote(UnitName("player"))
+	if isRos then
+		_note = tonumber(_note) * GTDR_GetCoefRos()
+	end
 	if _note then
 		local _min = math.floor(_note * _fDigits[1])
 		local _max = math.floor(_note * _fDigits[2] + 100)					
@@ -126,7 +133,7 @@ function GTDR_GetMyOfficerNote()
 end
 
 function GTDR_SetFieldMyRoll()
-	FieldRollInterval:SetText("Мой интервал рола: ".. color_prefix_white .. GTDR_GetMyRoll() .. "|r")
+	FieldRollInterval:SetText("Мои интервалы рола MS/OS: ".. color_prefix_white .. GTDR_GetMyRoll(nil) .. "|r/|cffaaaaaa"..GTDR_GetMyRoll(true).."|r")
 end
 
 function GTDR_SetFieldFormula()
@@ -167,8 +174,8 @@ function GTDR_SetZones()
 		"Blackwing Lair",--4
 		"Ahn'Qiraj",--5
 		"Naxxramas",--6
-		"Tel'Abim",--7 debug only
-		"The Upper Necropolis"--8 (Сапфирон и Кель)
+		"The Barrens",--7 debug only
+		"The Upper Necropolis",--8 (Сапфирон и Кель)
 	}
 	
   local i = GetGuildInfoText()
@@ -178,13 +185,10 @@ function GTDR_SetZones()
       return nil
     else    	
     	local _string_find = --[[string.gmatch or]] string.find
-    	local _, _, _ids = _string_find(i, "[=]+(%d+[,]+.*)");
+    	local _, _, _ids = _string_find(i, "=(%d+[,]?.*)=");
 			if _ids == nil then
-  			_, _, _ids = _string_find(i, "[=]+(%d+)");
-  			if _ids == nil then
-   				DEFAULT_CHAT_FRAME:AddMessage("|cFFFF00FFОтсутствует информация о доступных подземельях!|r")
-   				return nil
-  			end
+   			DEFAULT_CHAT_FRAME:AddMessage("|cFFFF00FFОтсутствует информация о доступных подземельях!|r")
+   			return nil
 			end
 	  	local _asd = GTDR_Split(_ids,",")
 		  local _countArray = table.getn(_asd);	 	  		  	
@@ -196,8 +200,8 @@ function GTDR_SetZones()
 end   
 
 function GTDR_IsZone()
-	local _accessInstances = GTDR_AccessInstances
-	for x = 1, table.getn(_accessInstances) do
+	local _accessInstances = GTDR_AccessInstances	
+	for x = 1, table.getn(_accessInstances) do		
 		if _accessInstances[x] == GetRealZoneText() then
 			return true
 		end
@@ -211,7 +215,7 @@ function GTDR_GetDigitsF()
     if i == "" then
       return {0, 0}
     else      
-	  local _, _, _min, _max = string.find(i, "[:](%d+[.]%d+)[,]+(%d+[.]%d+)");
+	  local _, _, _min, _max = string.find(i, ":(%d+[.]%d+)[,]+(%d+[.]%d+):");
     if _min and _max then
         return {tonumber(_min), tonumber(_max)}
 	  else 
@@ -220,6 +224,24 @@ function GTDR_GetDigitsF()
     end
   else 
 	  return {0,0}
+  end
+end
+
+function GTDR_GetCoefRos()
+  i = GetGuildInfoText()    
+  if i then
+    if i == "" then
+      return GTDR_DEFAULT_ROS_COEF
+    else      
+	  local _, _, _min = string.find(i, "@(%d+[.]%d+)@");
+    if _min then
+        return tonumber(_min)
+	  else 
+		  return GTDR_DEFAULT_ROS_COEF
+      end
+    end
+  else 
+	  return GTDR_DEFAULT_ROS_COEF
   end
 end
 
@@ -281,7 +303,7 @@ end
 function GTDR_ShowHelp()
 	DEFAULT_CHAT_FRAME:AddMessage("Аддон `gtdroll` гильдии \"Going to Death\". Предназначен для модифицированного рола (MS,OS,Transmg) с учетом progress-points в рейдах на 40 человек.",1,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("Список команд:",0,1,0);
-	DEFAULT_CHAT_FRAME:AddMessage(string.format("/rms - рол на мейн-спек (%s).", GTDR_GetMyRoll()),1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage(string.format("/rms - рол на мейн-спек (%s).", GTDR_GetMyRoll(nil)),1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/ros - рол на офф-спек (1-70).",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/rxmg - рол на трансмог (1-50).",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/reload - перезагрузка интерфейса.",1,1,1);
@@ -308,21 +330,33 @@ function SlashCmdList.GTDROLLHELP(msg, editbox)
 end
 
 function SlashCmdList.GTDRRMS(msg, editbox)		
-	GTDR_RollMs()
+	GTDR_Roll(nil)
 end
 
-function GTDR_RollMs()
+function GTDR_RollMSorOSWithoutPP(isRos)
+	if isRos then
+		RandomRoll(1,70);
+	else
+		RandomRoll(1,100);
+	end
+end 
+
+--МС или ОС ролы
+function GTDR_Roll(isRos)
 	GTDR_SetZones()
-	local _realNameZone = GetRealZoneText()	
+	local _realNameZone = GetRealZoneText()
 	local _guildName, _guildRankName, _guildRankIndex = GetGuildInfo("Player");
 	local _playerName = UnitName("Player");
 
 	if GTDR_IsZone() then					
 		for i = 1, GetNumGuildMembers(1) do
-			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);
-			officernote = tonumber(officernote)			
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);			
+			officernote = tonumber(officernote)	
 			if name == _playerName then				
 				if type(officernote) == "number" then
+					if isRos then -- если бросок на офф-спек, то пп рейдера умножаем на модификатор, указанный в настройках гильд-инфо (по умолчанию 0.5)
+						officernote = officernote * GTDR_GetCoefRos()
+					end
 					local _fDigits = GTDR_GetDigitsF();
 					local _min = math.floor(officernote * _fDigits[1])
 					local _max = math.floor(officernote * _fDigits[2] + 100)					
@@ -331,16 +365,13 @@ function GTDR_RollMs()
 					end
 					RandomRoll(_min,_max);
 				else
-					RandomRoll(1,100);
+					GTDR_RollMSorOSWithoutPP(isRos)
 				end
 			end
-		end
-	elseif _guildName == _guild and not GTDR_IsZone() then
-		GTDR_AnnoErrorRms()
-		RandomRoll(1,100);	
+		end	
 	else	
-		GTDR_AnnoErrorRms()	 
-		RandomRoll(1,100);
+		GTDR_AnnoErrorRms()
+		GTDR_RollMSorOSWithoutPP(isRos)
 	end
 end
 
@@ -349,14 +380,14 @@ function GTDR_AnnoErrorRms()
 end
 
 function SlashCmdList.GTDRROS(msg, editbox)
-	RandomRoll(1,70);
+	GTDR_Roll(true)
 end
 
 function SlashCmdList.GTDRRXMG(msg, editbox)
 	RandomRoll(1,50);
 end
 
---функция авторола
+--функция авторола NEED в подземельях
 function GTDR_AutoRoll(id)
 	local  inInstance, instanceType = IsInInstance()
 	local inRaidInstance  = (instanceType == 'raid');	
@@ -418,7 +449,7 @@ GTDR_G_RatingFrame:SetBackdrop({
 --заголовок 1
 local RaitingGuildHeader = CreateFrame("Frame", "raitingHeader", GTDR_G_RatingFrame)
 RaitingGuildHeader:SetPoint("TOP", GTDR_G_RatingFrame, "TOP", 0, 12)
-RaitingGuildHeader:SetWidth(320)
+RaitingGuildHeader:SetWidth(350)
 RaitingGuildHeader:SetHeight(64)
 RaitingGuildHeader:SetBackdrop({
 	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Header"
@@ -443,7 +474,7 @@ ScrollFrame:SetPoint("BOTTOMRIGHT", -37, 4)
 local eb = CreateFrame("Editbox", nil, ScrollFrame)
 eb:SetMultiLine(true)
 eb:SetFontObject(GameFontHighlightSmall)
-eb:SetWidth(230)
+eb:SetWidth(260)
 eb:SetAutoFocus(false)
 scrollFrame:SetScrollChild(eb)
 --конец фрейма
@@ -460,7 +491,7 @@ GTDR_P_RatingFrame:SetBackdrop({
 --заголовок 2
 local RaitingRaidHeader = CreateFrame("Frame", "raitingHeader", GTDR_P_RatingFrame)
 RaitingRaidHeader:SetPoint("TOP", GTDR_P_RatingFrame, "TOP", 0, 12)
-RaitingRaidHeader:SetWidth(390)
+RaitingRaidHeader:SetWidth(420)
 RaitingRaidHeader:SetHeight(64)
 RaitingRaidHeader:SetBackdrop({
 	bgFile = "Interface\\DialogFrame\\UI-DialogBox-Header"
@@ -484,7 +515,7 @@ local eb2 = CreateFrame("Editbox", nil, scrollFrameParty)
 eb2:SetMultiLine(true)
 eb2:SetAutoFocus(false)
 eb2:SetFontObject(GameFontHighlightSmall)
-eb2:SetWidth(230)
+eb2:SetWidth(260)
 scrollFrameParty:SetScrollChild(eb2)
 --конец фрейма
 
@@ -501,17 +532,18 @@ end
 --формирование данных рейтинга игроков гильдии
 function GTDR_GetListRaiting(frame, checkRaid)
 	local formula = GTDR_GetDigitsF()
+	local coefRos = GTDR_GetCoefRos()
 	local f, _, _ = GameFontNormal:GetFont() 	
 	local players = {}
 	local textRating = ""
 	local tempPlayers = {}
 
 	if not checkRaid then
-		frame:SetPoint("TOPLEFT", GtdRollFrame, -265, 0)
+		frame:SetPoint("TOPLEFT", GtdRollFrame, -295, 0)
 	else
-		frame:SetPoint("TOPRIGHT", GtdRollFrame, 265, 0)
+		frame:SetPoint("TOPRIGHT", GtdRollFrame, 295, 0)
 	end
-	frame:SetWidth(270)
+	frame:SetWidth(300)
 	frame:SetHeight(329)
 	
 	for y = 1, GetNumGuildMembers(1) do		
@@ -540,17 +572,20 @@ function GTDR_GetListRaiting(frame, checkRaid)
 	local _min, _max
 	for x = 1, countString do 
 		_min = math.floor(tempPlayers[x][2]*formula[1])
-		
+		_minRos = math.floor((tempPlayers[x][2] * coefRos) * formula[1])
 		if _min < 1 then
-			_min = 1
+			_min = 1			
 		end
-
+		if _minRos < 1 then			
+			_minRos = 1
+		end
 		_max = math.floor(tempPlayers[x][2]*formula[2]+100)
+		_maxRos = math.floor((tempPlayers[x][2] * coefRos) * formula[2]+100)
 
 		if SortField == "pp" then 
-			textRating = string.format("|cff00ff7f%s|r |cff5e5e5e- - ->|r %s (%s)   |cffFFF569(%s-%s)|r\r", tempPlayers[x][2], tempPlayers[x][1], tempPlayers[x][3], tostring(_min), tostring(_max)) .. textRating
+			textRating = string.format("|cff00ff7f%s|r |cff5e5e5e- - ->|r %s (%s)   |cffFFF569(%s-%s)|r / |cffaaaaaa(%s-%s)|r\r", tempPlayers[x][2], tempPlayers[x][1], tempPlayers[x][3], tostring(_min), tostring(_max), tostring(_minRos), tostring(_maxRos)) .. textRating
 		elseif SortField == "name" then
-			textRating = string.format("|cff00ff7f%s (%s)|r |cff5e5e5e<- - -|r %s   |cffFFF569(%s-%s)|r\r", tempPlayers[x][1], tempPlayers[x][3], tempPlayers[x][2], tostring(_min), tostring(_max)) .. textRating			
+			textRating = string.format("|cff00ff7f%s (%s)|r |cff5e5e5e<- - -|r %s   |cffFFF569(%s-%s)|r / |cffaaaaaa(%s-%s)|r\r", tempPlayers[x][1], tempPlayers[x][3], tempPlayers[x][2], tostring(_min), tostring(_max), tostring(_minRos), tostring(_maxRos)) .. textRating			
 		end		
 	end
 
