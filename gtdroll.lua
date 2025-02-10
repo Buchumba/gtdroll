@@ -27,6 +27,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..color_prefix_orange.."ROLL|r"
+GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
@@ -307,35 +308,7 @@ function SlashCmdList.GTDROLLHELP(msg, editbox)
 end
 
 function SlashCmdList.GTDRRMS(msg, editbox)		
-	GTDR_SetZones()
-	local _realNameZone = GetRealZoneText()	
-	local _guildName, _guildRankName, _guildRankIndex = GetGuildInfo("Player");
-	local _playerName = UnitName("Player");
-
-	if GTDR_IsZone() then					
-		for i = 1, GetNumGuildMembers(1) do
-			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);
-			officernote = tonumber(officernote)			
-			if name == _playerName then				
-				if type(officernote) == "number" then
-					local _fDigits = GTDR_GetDigitsF();
-					local _min = math.floor(officernote * _fDigits[1])
-					local _max = math.floor(officernote * _fDigits[2] + 100)					
-					if _min < 1 then
-						_min = 1;
-					end
-					RandomRoll(_min,_max);
-				else
-					RandomRoll(1,100);
-				end
-			end
-		end
-	elseif _guildName == _guild and not GTDR_IsZone() then
-		DEFAULT_CHAT_FRAME:AddMessage("|cFFFF8080Команда `/rms` работает только в рейдовых подземельях указанных в настройках гильдии!|r");
-		RandomRoll(1,100);	
-	else		 
-		RandomRoll(1,100);
-	end
+	GTDR_RollMs()
 end
 
 function GTDR_RollMs()
