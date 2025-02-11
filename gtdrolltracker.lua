@@ -52,7 +52,7 @@ GTDR_TableRollFrame:EnableMouse(true)
 GTDR_TableRollFrame:RegisterForDrag("LeftButton")
 GTDR_TableRollFrame:SetScript("OnDragStart", function() this:StartMoving() end)
 GTDR_TableRollFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
-GTDR_TableRollFrame:SetWidth(200)
+GTDR_TableRollFrame:SetWidth(230)
 GTDR_TableRollFrame:SetHeight(200)
 GTDR_TableRollFrame:SetPoint("CENTER", UIParent, "TOP", 0,-200)
 GTDR_TableRollFrame:SetBackdrop({
@@ -87,7 +87,7 @@ GTDR_TableScrollFrame:SetPoint("BOTTOMRIGHT", -37, 4)
 local eb4 = CreateFrame("Editbox", nil, GTDR_TableScrollFrame)
 eb4:SetMultiLine(true)
 eb4:SetFontObject(GameFontHighlightSmall)
-eb4:SetWidth(260)
+eb4:SetWidth(230)
 eb4:SetAutoFocus(false)
 eb4:SetHeight(450)
 GTDR_TableScrollFrame:SetScrollChild(eb4)
@@ -145,7 +145,9 @@ function SetColorRoll(nickname, _rollMin, _rollMax)
         if _rollMin == _minRos and _rollMax == _maxRos then
             return yellowColor, "[os]"
         elseif (_rollMin ~= _minRos and _rollMin > 1 ) and (_rollMax ~= _maxRos and _rollMax > 100) then
-            return redColor, "[ ! ]"
+            GTDR_TableRollFrame:SetWidth(300)
+            eb4:SetWidth(300)
+            return redColor, "[ ! ], |cffaaaaaaMS: ".. _min.."-".._max..", OS: ".._minRos.."-".._maxRos.."|r"            
         end
     end
     return "|cffffffff", ""
