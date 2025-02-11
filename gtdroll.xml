@@ -228,8 +228,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>					
-					<OnEnter>GTDR_ButtonRollOnLoad("Вспомогательный фрейм для роллов")</OnEnter>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Вспомогательный фрейм для роллов")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>
 
@@ -414,8 +414,29 @@
 							GtdRollFrame:Show()
 						end		
 					</OnClick>
-					<OnEnter>GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" name="buttonEnabledTracker" text="[...]">
+				<Size x="20" y="20" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+						<Offset x="40" y="-16" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						if GTDR_TableRollFrame:IsShown() then 
+							GTDR_TableRollFrame:Hide()
+							GTDR_ShowRollTracker = nil
+						else
+							GTDR_TableRollFrame:Show()
+							GTDR_ShowRollTracker = true
+						end		
+					</OnClick>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Вкл.\Выкл. работу окна ролл-трекера")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>	
 
@@ -427,7 +448,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_Roll(nil)</OnClick>
 				</Scripts>
 			</Button>
@@ -439,8 +460,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на офф-спек")</OnEnter>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на офф-спек")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_Roll(true)</OnClick>
 				</Scripts>
 			</Button>
@@ -452,8 +473,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_ButtonRollOnLoad("Ролл на трансмог: 1-50")</OnEnter>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на трансмог: 1-50")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>RandomRoll(1,50);</OnClick>
 				</Scripts>
 			</Button>
@@ -465,8 +486,8 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_ButtonRollOnLoad("Обычный ролл: 1-100")</OnEnter>
-					<OnLeave>GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Обычный ролл: 1-100")</OnEnter>
+					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>RandomRoll(1,100)</OnClick>
 				</Scripts>
 			</Button>	

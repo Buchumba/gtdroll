@@ -3,7 +3,8 @@
 ## Version: 1.0
 ## Author: Casta (guild "Going to death"), site: www.goingtodeath.ru, project: Turtle-wow, email: baners@mail.ru
 ## Interface: 11200
-## SavedVariablesPerCharacter: GTDR_ZG_AUTONEED, GTDR_AQ_AUTONEED, GTDR_BM_AUTONEED, GTDR_KARA_AUTONEED, GTDR_ShowMiniFrame
+## SavedVariablesPerCharacter: GTDR_ZG_AUTONEED, GTDR_AQ_AUTONEED, GTDR_BM_AUTONEED, GTDR_KARA_AUTONEED, GTDR_ShowMiniFrame, GTDR_ShowRollTracker
 
 gtdroll.lua
+gtdrolltracker.lua
 gtdroll.xml

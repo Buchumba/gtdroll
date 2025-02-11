@@ -1,6 +1,7 @@
 --аддон для ролов на MS, OS, Трансмог
 --По всем вопросам аддона обращайтесь к Casta\Madarra ("Going to Death" | WOW-Turtle)
 
+GTDR_GLOBALS = {}
 SLASH_GTDROLL1 = "/gtdroll";--help
 SLASH_GTDROLLHELP1 = "/gtdrollhelp";--help
 SLASH_GTDRRMS1 = "/rms";--roll ms
@@ -16,7 +17,7 @@ SLASH_GTDRRESET3 = "/resetinstances";
 SlashCmdList["GTDRRESET"] = ResetInstances;
 local text_access_error = "К сожалению у вас |cffff0000нет доступа|r для просмотра офицерской заметки. ГМ гильдии может предоставить эти права."
 local color_prefix_white = "|cffffffff"
-local color_prefix_orange = "|cffffaa00"
+GTDR_GLOBALS.color_prefix_orange = "|cffffaa00"
 local SortField = "pp"--сортировка по умолчанию по progress-points все гильдии
 local P_SortField = "pp"--сортировка по умолчанию по progress-points рейда\пати
 local THE_BLACK_MORASS = "The Black Morass"
@@ -26,11 +27,19 @@ GTDR_HAKKARI_BIJOU = "Hakkari Bijou"
 GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
-GTDR_NAME_ADDON = "GTD"..color_prefix_orange.."ROLL|r"
+GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
+
+--[[local function Initialize()
+    --print("MyAddon loaded!")
+end]]
+
+--GTDR_GLOBALS.Initialize = Initialize
+
+--Initialize()
 
 --мини-фрейм
 function GTDR_MiniInit()
@@ -39,11 +48,11 @@ function GTDR_MiniInit()
 		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
 		FieldRollIntervalHelper:SetText(_roll)		
 		ButtonRollMs:SetScript("OnEnter", function() 	
-			GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. _roll)
+			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. _roll)
 		end)
 		ButtonRollOs:SetScript("OnEnter", function()
-			GTDR_ButtonRollOnLoad("Ролл на офф-спек: " .. GTDR_GetMyRoll(true))
-		end)
+			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на офф-спек: " .. GTDR_GetMyRoll(true))
+		end)		
 	else
 		FieldProgressPointsHelper:SetText("...")
 	end
@@ -103,10 +112,10 @@ function GTDR_Init()
 end
 
 function GTDR_GetMyRoll(isRos)
-	local _fDigits = GTDR_GetDigitsF();
-	local _note = GTDR_GetOfficerNote(UnitName("player"))
+	local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
+	local _note = GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player"))
 	if isRos then
-		_note = tonumber(_note) * GTDR_GetCoefRos()
+		_note = tonumber(_note) * GTDR_GLOBALS.GTDR_GetCoefRos()
 	end
 	if _note then
 		local _min = math.floor(_note * _fDigits[1])
@@ -125,7 +134,7 @@ function GTDR_SetFieldMyPP()
 end
 
 function GTDR_GetMyOfficerNote()
-	local _mynote = GTDR_GetOfficerNote(UnitName("player"))
+	local _mynote = GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player"))
 	if _mynote then
 		return math.floor(_mynote)
 	end
@@ -137,13 +146,13 @@ function GTDR_SetFieldMyRoll()
 end
 
 function GTDR_SetFieldFormula()
-	local _pp = math.floor(GTDR_GetOfficerNote(UnitName("player")))
-	local _fDigits = GTDR_GetDigitsF();
+	local _pp = math.floor(GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player")))
+	local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
 	local _text = string.format("|cffaaaaaamin:|r%d*%s,  |cffaaaaaamax:|r%d*%s+100", _pp, _fDigits[1], _pp, _fDigits[2])
 	FieldFormula:SetText("Расчет по формуле: " .. _text  .. "")
 end
 
-function GTDR_GetOfficerNote(nickname)		
+function GTDR_GLOBALS.GTDR_GetOfficerNote(nickname)		
 	for y = 1, GetNumGuildMembers(1) do
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
 		if type(tonumber(officernote)) == "number" and name == nickname then
@@ -209,7 +218,7 @@ function GTDR_IsZone()
 	return nil
 end
 
-function GTDR_GetDigitsF()
+function GTDR_GLOBALS.GTDR_GetDigitsF()
   i = GetGuildInfoText()    
   if i then
     if i == "" then
@@ -227,7 +236,7 @@ function GTDR_GetDigitsF()
   end
 end
 
-function GTDR_GetCoefRos()
+function GTDR_GLOBALS.GTDR_GetCoefRos()
   i = GetGuildInfoText()    
   if i then
     if i == "" then
@@ -355,9 +364,9 @@ function GTDR_Roll(isRos)
 			if name == _playerName then				
 				if type(officernote) == "number" then
 					if isRos then -- если бросок на офф-спек, то пп рейдера умножаем на модификатор, указанный в настройках гильд-инфо (по умолчанию 0.5)
-						officernote = officernote * GTDR_GetCoefRos()
+						officernote = officernote * GTDR_GLOBALS.GTDR_GetCoefRos()
 					end
-					local _fDigits = GTDR_GetDigitsF();
+					local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
 					local _min = math.floor(officernote * _fDigits[1])
 					local _max = math.floor(officernote * _fDigits[2] + 100)					
 					if _min < 1 then
@@ -435,7 +444,7 @@ gtdrEvents:SetScript("OnEvent", function()
 end)
 
 function GTDR_AutoLootAnnounce(zoneName, textOfLoot)
-	DEFAULT_CHAT_FRAME:AddMessage("[GTD"..color_prefix_orange.."Roll|r]: Вы зашли в подземелье '"..zoneName.."' для автолута "..textOfLoot..". Для отключения этой настройки в окне аддона используйте команду: '/gtdroll'.")
+	DEFAULT_CHAT_FRAME:AddMessage("[GTD"..GTDR_GLOBALS.color_prefix_orange.."Roll|r]: Вы зашли в подземелье '"..zoneName.."' для автолута "..textOfLoot..". Для отключения этой настройки в окне аддона используйте команду: '/gtdroll'.")
 end
 
 --блок инициализации фрейма рейтинга для гильдии
@@ -478,7 +487,6 @@ eb:SetWidth(260)
 eb:SetAutoFocus(false)
 scrollFrame:SetScrollChild(eb)
 --конец фрейма
-
 
 --блок инициализации фрейма рейтинга для пати\рейда
 GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", GtdRollFrame)
@@ -531,8 +539,8 @@ end
 
 --формирование данных рейтинга игроков гильдии
 function GTDR_GetListRaiting(frame, checkRaid)
-	local formula = GTDR_GetDigitsF()
-	local coefRos = GTDR_GetCoefRos()
+	local formula = GTDR_GLOBALS.GTDR_GetDigitsF()
+	local coefRos = GTDR_GLOBALS.GTDR_GetCoefRos()
 	local f, _, _ = GameFontNormal:GetFont() 	
 	local players = {}
 	local textRating = ""
@@ -625,14 +633,14 @@ function GTDR_UnitIsParty(name)
 	return nil			
 end
 
-function GTDR_ButtonRollOnLoad(text)	
+function GTDR_GLOBALS.GTDR_ButtonRollOnLoad(text)	
 	GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); 
   GameTooltip:ClearLines();
   GameTooltip:SetText(text, 1,1,1,0.75)
   GameTooltip:Show()
 end
 
-function GTDR_ButtonRollOnLeave()
+function GTDR_GLOBALS.GTDR_ButtonRollOnLeave()
 	 GameTooltip:Hide() 
 end
 
