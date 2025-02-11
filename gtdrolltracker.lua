@@ -144,6 +144,8 @@ function SetColorRoll(nickname, _rollMin, _rollMax)
         end
         if _rollMin == _minRos and _rollMax == _maxRos then
             return yellowColor, "[os]"
+        elseif (_rollMin ~= _minRos and _rollMin > 1 ) and (_rollMax ~= _maxRos and _rollMax > 100) then
+            return redColor, "[ ! ]"
         end
     end
     return "|cffffffff", ""
