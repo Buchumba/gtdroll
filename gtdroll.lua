@@ -93,7 +93,7 @@ function GTDR_Init()
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
 	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
 	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(nil)))	
-	rosInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на офф-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(true)))	
+	rosInfo:SetText(string.format("|cffaaaaaa/ros|r ролл на офф-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(true)))	
 	if CanViewOfficerNote() then
 		FieldAccessError:Hide()			
 		GTDR_SetFieldMyPP()
