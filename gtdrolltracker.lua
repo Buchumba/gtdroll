@@ -29,12 +29,15 @@ GTDR_FrameRollHundler:SetScript("OnEvent", function()
             -- Обновляем отображение таблицы
             GTDR_UpdateRollTable()
         end
+        UpdateTableText()
     end
 end)
+
 -- Функция для обновления таблицы бросков
 function GTDR_UpdateRollTable()
-    -- Очищаем предыдущие данные
+    -- Очищаем предыдущие данные 
     for i = 1, table.getn(rollTable) do
+        message(rollTable[i])
         rollTable[i] = nil
     end
     -- Сортируем таблицу по значению броска
@@ -69,7 +72,7 @@ end
 --заголовок 1
 local GTDR_TableRollFrameHeader = CreateFrame("Frame", "GTDR_TableRollFrameHeader", GTDR_TableRollFrame)
 GTDR_TableRollFrameHeader:SetPoint("TOP", GTDR_TableRollFrame, "TOP", 0, 12)
-GTDR_TableRollFrameHeader:SetWidth(300)
+GTDR_TableRollFrameHeader:SetWidth(350)
 GTDR_TableRollFrameHeader:SetHeight(64)
 GTDR_TableRollFrameHeader:SetBackdrop({
     bgFile = "Interface\\DialogFrame\\UI-DialogBox-Header"
@@ -96,17 +99,19 @@ GTDR_TableScrollFrame:SetScrollChild(eb4)
 local GTDR_ClearButton = CreateFrame("Button", "GTDR_ClearButton", GTDR_TableRollFrame, "GameMenuButtonTemplate")
 GTDR_ClearButton:SetWidth(80)
 GTDR_ClearButton:SetHeight(18)
-GTDR_ClearButton:SetPoint("BOTTOM", GTDR_TableRollFrame, "BOTTOMLEFT", 52, 12)
+GTDR_ClearButton:SetPoint("BOTTOM", GTDR_TableRollFrame, "BOTTOM", 0, 12)
 GTDR_ClearButton:SetText("Очистить")
 
 --кнопка закрытия окна ролов
 local GTDR_CloseButton = CreateFrame("Button", "GTDR_CloseButton", GTDR_TableRollFrame, "UIPanelCloseButton")
 GTDR_CloseButton:SetWidth(30)
 GTDR_CloseButton:SetHeight(30)
-GTDR_CloseButton:SetPoint("BOTTOM", GTDR_TableRollFrame, "BOTTOMRIGHT", -22, 6)
+GTDR_CloseButton:SetPoint("TOP", GTDR_TableRollFrame, "TOPRIGHT", -18, 6)
 
 GTDR_ClearButton:SetScript("OnClick", function(self, button, down)
-    sortedTable = {}
+    rollTable = {}
+    sortedTable = {}  
+    eb4:SetText("")  
 end)
 
 GTDR_CloseButton:SetScript("OnEnter", function(self, button, down)
@@ -120,6 +125,7 @@ end)
 function UpdateTableText()
     local text = ""
     local _count = table.getn(sortedTable) or 1
+
     for i, data in ipairs(sortedTable) do
         local _colorText, _typeRoll = SetColorRoll(data.player, data.minRoll, data.maxRoll)
         text = text .. string.format("%s%d. %s: %d (%d-%d)|r %s\n", _colorText, i, data.player, data.roll, data.minRoll, data.maxRoll, _typeRoll)
@@ -129,14 +135,20 @@ end
 
 function SetColorRoll(nickname, _rollMin, _rollMax)
     local _note = GTDR_GLOBALS.GTDR_GetOfficerNote(nickname)
-    local _min = math.floor(_note * fDigits[1])
-    local _max = math.floor(_note * fDigits[2] + 100)
+    local _min, _max
+    if _note then
+        _min = math.floor(_note * fDigits[1])
+        _max = math.floor(_note * fDigits[2] + 100)
+    else
+        _min = 1
+        _max = 100
+    end    
     if _min < 1 then
         _min = 1;
     end
-    if _rollMin == _min and _rollMax == _max then
+    if _rollMin == _min and _rollMax == _max and _note then
         return greenColor, "[ms]"
-    else
+    elseif _note then
         local _minRos = math.floor((_note * coefRos) * fDigits[1])
         local _maxRos = math.floor((_note * coefRos) * fDigits[2] + 100)
         if _minRos < 1 then
@@ -144,16 +156,11 @@ function SetColorRoll(nickname, _rollMin, _rollMax)
         end
         if _rollMin == _minRos and _rollMax == _maxRos then
             return yellowColor, "[os]"
-        elseif (_rollMin ~= _minRos and _rollMin > 1 ) and (_rollMax ~= _maxRos and _rollMax > 100) then
+        elseif (_rollMin ~= _minRos and _rollMin >= 1 ) and (_rollMax ~= _maxRos and _rollMax > 100) then
             GTDR_TableRollFrame:SetWidth(300)
             eb4:SetWidth(300)
             return redColor, "[ ! ], |cffaaaaaaMS: ".. _min.."-".._max..", OS: ".._minRos.."-".._maxRos.."|r"            
-        end
+        end    
     end
     return "|cffffffff", ""
 end
-
--- Обновляем текст таблицы при изменении данных
-GTDR_FrameRollHundler:SetScript("OnUpdate", function()
-    UpdateTableText()
-end)
