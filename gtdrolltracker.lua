@@ -8,6 +8,7 @@ local yellowColor= "|cffffcc00"
 local redColor = "|cffff6633"
 local greenColor = "|cff99ff33"
 local grayColor = "|cffcccccc"
+local blueColor = "|cff66ffff"
 local coefRos = GTDR_GLOBALS.GTDR_GetCoefRos()
 local fDigits = GTDR_GLOBALS.GTDR_GetDigitsF()
 
@@ -92,7 +93,7 @@ eb4:SetMultiLine(true)
 eb4:SetFontObject(GameFontHighlightSmall)
 eb4:SetWidth(230)
 eb4:SetAutoFocus(false)
-eb4:SetHeight(450)
+eb4:SetHeight(550)
 GTDR_TableScrollFrame:SetScrollChild(eb4)
 
 --кнопка очистки окна ролов
@@ -146,7 +147,9 @@ function SetColorRoll(nickname, _rollMin, _rollMax)
     if _min < 1 then
         _min = 1;
     end
-    if _rollMin == _min and _rollMax == _max and _note then
+    if _rollMin == 1 and _rollMax == 50 then
+        return blueColor, "[rxmg]"
+    elseif _rollMin == _min and _rollMax == _max and _note  and (_rollMin ~= 1 and _rollMax ~= 100)  then
         return greenColor, "[ms]"
     elseif _note then
         local _minRos = math.floor((_note * coefRos) * fDigits[1])
