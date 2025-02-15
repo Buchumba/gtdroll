@@ -138,28 +138,28 @@
 				</FontString>
 			</Layer>	
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedZG" text="">
-					<Size x="190" y="30"/>
+				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedZG" text="">
+					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="5" y="122" />
+							<Offset x="7" y="122" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedAQ" text="">
-					<Size x="190" y="30"/>
+				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedAQ" text="">
+					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-19" y="107" />
+							<Offset x="-17" y="107" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedKara" text="">
-					<Size x="190" y="30"/>
+				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedKara" text="">
+					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
 							<Offset x="7" y="92" />
@@ -168,8 +168,9 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="fieldAutoNeedBM" text="">
+				<FontString inherits="GameFontNormalSmall" Size="10" font="font/MORPHEUS.TTF" name="fieldAutoNeedBM" text="">
 					<Size x="250" y="30"/>
+
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
 							<Offset x="7" y="77" />
