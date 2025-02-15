@@ -113,7 +113,7 @@ end
 
 function GTDR_GetMyRoll(isRos)
 	local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
-	local _note = GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player"))
+	local _note = GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player")) or 0
 	if isRos then
 		_note = tonumber(_note) * GTDR_GLOBALS.GTDR_GetCoefRos()
 	end
