@@ -147,22 +147,30 @@ function SetColorRoll(nickname, _rollMin, _rollMax)
     if _min < 1 then
         _min = 1;
     end
+    
     if _rollMin == 1 and _rollMax == 50 then
         return blueColor, "[rxmg]"
-    elseif _rollMin == _min and _rollMax == _max and _note  and (_rollMin ~= 1 and _rollMax ~= 100)  then
-        return greenColor, "[ms]"
+    elseif _rollMin == 1 and _rollMax == 70 then
+        return yellowColor, "[os]"
+    elseif _rollMin == 1 and _rollMax == 100 then
+        return "|cffffffff", ""    
     elseif _note then
         local _minRos = math.floor((_note * coefRos) * fDigits[1])
         local _maxRos = math.floor((_note * coefRos) * fDigits[2] + 100)
+        
+        --easy correct
         if _minRos < 1 then
             _minRos = 1;
         end
-        if _rollMin == _minRos and _rollMax == _maxRos then
-            return yellowColor, "[os]"
+
+        if _rollMin <= _min and _rollMax <= _max and _rollMin > _minRos and _rollMax > _maxRos then
+            return greenColor, "[ms]" -- ROLL MS
+        elseif _rollMin <= _minRos and _rollMax <= _maxRos then
+            return yellowColor, "[os]" -- ROLL OS
         elseif (_rollMin ~= _minRos and _rollMin >= 1 ) and (_rollMax ~= _maxRos and _rollMax > 100) then
             GTDR_TableRollFrame:SetWidth(300)
             eb4:SetWidth(300)
-            return redColor, "[ ! ], |cffaaaaaaMS: ".. _min.."-".._max..", OS: ".._minRos.."-".._maxRos.."|r"            
+            return redColor, "[ ! ], |cffaaaaaaMS: ".. _min.."-".._max..", OS: ".._minRos.."-".._maxRos.."|r"    -- error ROLL        
         end    
     end
     return "|cffffffff", ""
