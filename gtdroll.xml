@@ -33,7 +33,10 @@
 		          </Anchors>
 				  <TexCoords left="0.2" right="0.8" top="0" bottom="0.6" />
 		        </Texture>
-				<FontString inherits="GameFontHighlight" font="font/MORPHEUS.TTF" name="titleAddon" text="">
+				<FontString inherits="GameFontHighlight" font="Fonts\ARIALN.TTF" name="titleAddon" text="">
+					<FontHeight>
+						<AbsValue val="14" />
+					</FontHeight>
 					<Size>
 				        <AbsDimension x="0" y="0" />
 					</Size>
@@ -45,7 +48,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontGreenLarge" font="font/MORPHEUS.TTF" name="NickNameField" text="">
+				<FontString inherits="GameFontGreenLarge" font="Fonts\ARIALN.TTF" name="NickNameField" text="">
+					<FontHeight>
+						<AbsValue val="18" />
+					</FontHeight>
 					<Size>
 				        <AbsDimension x="0" y="60" />
 					</Size>
@@ -58,7 +64,10 @@
 			</Layer>
 			
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="FieldAccessError" text="">
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" name="FieldAccessError" text="">
+					<FontHeight>
+						<AbsValue val="12" />
+					</FontHeight>
 					<Size x="250" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -68,7 +77,10 @@
 				</FontString>				
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPoints" text="">
+				<FontString inherits="GameFontNormalLarge" font="Fonts\ARIALN.TTF" name="FieldProgressPoints" text="">
+					<FontHeight>
+						<AbsValue val="16" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -78,7 +90,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldRollInterval" text="">
+				<FontString inherits="GameFontNormalLarge" font="Fonts\ARIALN.TTF" name="FieldRollInterval" text="">
+					<FontHeight>
+						<AbsValue val="14" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -88,7 +103,10 @@
 				</FontString>
 			</Layer>	
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormal" font="font/MORPHEUS.TTF" name="FieldFormula" text="">
+				<FontString inherits="GameFontNormal" font="Fonts\ARIALN.TTF" name="FieldFormula" text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -98,7 +116,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="rmsInfo" text="">
+				<FontString inherits="GameFontDisableSmall" font="Fonts\ARIALN.TTF" name="rmsInfo" text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -108,7 +129,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" name="rosInfo" font="font/MORPHEUS.TTF"  text="">
+				<FontString inherits="GameFontDisableSmall" name="rosInfo" font="Fonts\ARIALN.TTF"  text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -118,7 +142,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="|cffaaaaaa/rxmg|r - ролл на трансмог (|cffaaaaaa1-50|r)">
+				<FontString inherits="GameFontDisableSmall" font="Fonts\ARIALN.TTF" text="|cffaaaaaa/rxmg|r - ролл на трансмог (|cffaaaaaa1-50|r)">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="LEFT">
@@ -128,7 +155,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="NumberFontNormalSmallGray" font="font/MORPHEUS.TTF" text="Настройки автосбора в подземельях">
+				<FontString inherits="NumberFontNormalSmallGray" font="Fonts\ARIALN.TTF" text="Настройки автосбора в подземельях">
+					<FontHeight>
+						<AbsValue val="12" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="CENTER">
@@ -138,7 +168,10 @@
 				</FontString>
 			</Layer>	
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedZG" text="">
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" name="fieldAutoNeedZG" text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
@@ -148,7 +181,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedAQ" text="">
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" name="fieldAutoNeedAQ" text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
@@ -158,7 +194,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalSmall" font="font/MORPHEUS.TTF" name="fieldAutoNeedKara" text="">
+				<FontString inherits="GameFontNormalSmall" font="Fonts\ARIALN.TTF" name="fieldAutoNeedKara" text="">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
@@ -168,18 +207,23 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalSmall" Size="10" font="font/MORPHEUS.TTF" name="fieldAutoNeedBM" text="">
+				<FontString inherits="GameFontNormalSmall" Size="10" font="Fonts\ARIALN.TTF" name="fieldAutoNeedBM" text="">
 					<Size x="250" y="30"/>
-
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="7" y="77" />
+							<Offset x="15" y="77" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" text="Повторное нажатие на рейтинг меняет тип сортировки: pp, имя. Так же, вы можете скопировать рейтинг при помощи команд: |cffaaaaaaCtrl+A и Ctrl+C|r">
+				<FontString inherits="GameFontDisableSmall" font="Fonts\ARIALN.TTF" text="Повторное нажатие на рейтинг меняет тип сортировки: pp, имя. Так же, вы можете скопировать рейтинг при помощи команд: Ctrl+A и Ctrl+C">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
 					<Size x="290" y="40"/>
 					<Anchors>
 						<Anchor point="BOTTOM">
@@ -221,7 +265,12 @@
 			</Button>
 
 			<!--кнопка мини-фрейм-->
-			<Button name="ButtonOpenMiniFrame" inherits="UIPanelButtonTemplate" text="мини-фрейм">
+			<Button name="ButtonOpenMiniFrame" inherits="UIPanelButtonTemplate" text="Мини-фрейм">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="80" y="30" />
 				<Anchors>
 					<Anchor point="RIGHT">
@@ -229,8 +278,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>					
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Вспомогательный фрейм для роллов")</OnEnter>
-					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad(nil, this)</OnEnter>					
 				</Scripts>
 			</Button>
 
@@ -290,6 +338,11 @@
 			<!--//настройки автолута-->	
 
 			<Button inherits="UIPanelButtonTemplate" text="PP-рейтинг гильдии">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="140" y="23" />
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
@@ -300,9 +353,16 @@
 					<OnClick>						
 						GTDR_OpenRatingScrollFrame(GTDR_G_RatingFrame, nil)	
 					</OnClick>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad(nil, this)</OnEnter>
+					
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRatingParty" text="PP-рейтинг пати\рейда">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="140" y="23" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -312,7 +372,8 @@
 				<Scripts>
 					<OnClick>						
 						GTDR_OpenRatingScrollFrame(GTDR_P_RatingFrame, true)
-					</OnClick>
+					</OnClick>	
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad(nil, this)</OnEnter>									
 				</Scripts>
 			</Button>	
 		</Frames>
@@ -364,7 +425,10 @@
 		</Backdrop>
 		<Layers>			
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalLarge" font="font/MORPHEUS.TTF" name="FieldProgressPointsHelper" text="">
+				<FontString inherits="GameFontNormalLarge" font="Fonts\ARIALN.TTF" name="FieldProgressPointsHelper" text="">
+					<FontHeight>
+						<AbsValue val="16" />
+					</FontHeight>
 					<Size x="140" y="30"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -374,7 +438,10 @@
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontDisableSmall" font="font/MORPHEUS.TTF" name="FieldRollIntervalHelper" text="">
+				<FontString inherits="GameFontDisableSmall" font="Fonts\ARIALN.TTF" name="FieldRollIntervalHelper" text="">
+					<FontHeight>
+						<AbsValue val="12" />
+					</FontHeight>
 					<Size x="295" y="50"/>
 					<Anchors>
 						<Anchor point="TOP">
@@ -385,7 +452,13 @@
 			</Layer>
 		</Layers>
 		<Frames>									
-			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
+			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">				
+				<Size x="28" y="28" />
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Anchors>
 					<Anchor point="TOPRIGHT" relativeTo="FrameRollxml" relativePoint="TOPRIGHT">
 						<Offset>
@@ -396,11 +469,17 @@
 				<Scripts>
 					<OnClick>
   			    	    this:GetParent():Hide()
-  			    	    GTDR_ShowMiniFrame = 0  			    	           			
+  			    	    GTDR_ShowMiniFrame = 0
+  			    	    GTDR_HelpTextCloseMiniFrame()  			    	           			
           			</OnClick>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" text="!">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="12" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="20" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
@@ -415,11 +494,16 @@
 							GtdRollFrame:Show()
 						end		
 					</OnClick>
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Открыть меню GTDROLL")</OnEnter>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Gtdroll Settings", this)</OnEnter>
 					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="buttonEnabledTracker" text="[...]">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="10" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="20" y="20" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
@@ -436,12 +520,17 @@
 							GTDR_ShowRollTracker = true
 						end		
 					</OnClick>
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Вкл.\Выкл. работу окна ролл-трекера")</OnEnter>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("On\\Off Tracker list", this)</OnEnter>
 					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 				</Scripts>
 			</Button>	
 
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollMs" text="|cff00ff00RMS|r">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="35" y="20" />
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
@@ -454,6 +543,11 @@
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollOs" text="|cffffff33ROS|r">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="35" y="20" />
 				<Anchors>
 					<Anchor point="BOTTOM">
@@ -461,12 +555,17 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на офф-спек")</OnEnter>
+					<!--OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("на офф-спек", this)</OnEnter-->
 					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>GTDR_Roll(true)</OnClick>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollXmg" text="|cffff9999R|r|cff33ccffx|r|cffff9933m|r|cff3399ffg|r">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="35" y="20" />
 				<Anchors>
 					<Anchor point="BOTTOM">
@@ -474,12 +573,17 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на трансмог: 1-50")</OnEnter>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Roll transmog: 1-50", this)</OnEnter>
 					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>RandomRoll(1,50);</OnClick>
 				</Scripts>
 			</Button>
 			<Button inherits="UIPanelButtonTemplate" name="ButtonRollXmg" text="|cffffffff1-100">
+				<NormalFont inherits="GameFontNormal" font="Fonts\ARIALN.TTF">
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+				</NormalFont>
 				<Size x="35" y="20" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
@@ -487,7 +591,7 @@
 					</Anchor>
 				</Anchors>
 				<Scripts>
-					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Обычный ролл: 1-100")</OnEnter>
+					<OnEnter>GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Normal roll: 1-100", this)</OnEnter>
 					<OnLeave>GTDR_GLOBALS.GTDR_ButtonRollOnLeave()</OnLeave>
 					<OnClick>RandomRoll(1,100)</OnClick>
 				</Scripts>

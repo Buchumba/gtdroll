@@ -1,7 +1,21 @@
 --аддон для ролов на MS, OS, Трансмог
 --По всем вопросам аддона обращайтесь к Casta\Madarra ("Going to Death" | WOW-Turtle)
 
-GTDR_GLOBALS = {}
+GTDR_GLOBALS = CreateFrame("Frame")
+GTDR_GLOBALS:RegisterEvent("ADDON_LOADED")
+GTDR_GLOBALS:SetScript("OnEvent", function()
+    if event then
+        if event == 'ADDON_LOADED' and arg1 == 'gtdroll' then            
+            return GTDR_GLOBALS.init()
+        end
+    end    
+end)
+
+function GTDR_GLOBALS.init()
+	DEFAULT_CHAT_FRAME:AddMessage(GTDR_NAME_ADDON.." loaded.")
+	GTDR_GLOBALS.GTDR_GetOfficerNote(nil)
+end
+
 SLASH_GTDROLL1 = "/gtdroll";--help
 SLASH_GTDROLLHELP1 = "/gtdrollhelp";--help
 SLASH_GTDRRMS1 = "/rms";--roll ms
@@ -33,6 +47,7 @@ GTDR_DEFAULT_ROS_COEF = 0.5
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
 
+
 --[[local function Initialize()
     --print("MyAddon loaded!")
 end]]
@@ -48,10 +63,10 @@ function GTDR_MiniInit()
 		FieldProgressPointsHelper:SetText(GTDR_GetMyOfficerNote())
 		FieldRollIntervalHelper:SetText(_roll)		
 		ButtonRollMs:SetScript("OnEnter", function() 	
-			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на мейн-спек: " .. _roll)
+			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Roll MS: " .. _roll, this)			
 		end)
 		ButtonRollOs:SetScript("OnEnter", function()
-			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Ролл на офф-спек: " .. GTDR_GetMyRoll(true))
+			GTDR_GLOBALS.GTDR_ButtonRollOnLoad("Roll OS: " .. GTDR_GetMyRoll(true), this)
 		end)		
 	else
 		FieldProgressPointsHelper:SetText("...")
@@ -69,8 +84,7 @@ function GTDR_OnLoad()
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
-	titleAddon:SetText(GTDR_NAME_ADDON)	
-
+	titleAddon:SetText(GTDR_NAME_ADDON)
 end
 
 function GTDR_OnShow()
@@ -153,12 +167,16 @@ function GTDR_SetFieldFormula()
 end
 
 function GTDR_GLOBALS.GTDR_GetOfficerNote(nickname)		
-	for y = 1, GetNumGuildMembers(1) do
-		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
-		if type(tonumber(officernote)) == "number" and name == nickname then
-			--table.insert(players, {name, tonumber(officernote), rank})		
-			return tonumber(officernote)
-		end			
+	if not nickname then
+		return nil
+	else
+		for y = 1, GetNumGuildMembers(1) do
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
+			if type(tonumber(officernote)) == "number" and name == nickname then
+				--table.insert(players, {name, tonumber(officernote), rank})		
+				return tonumber(officernote)
+			end			
+		end
 	end
 end
 
@@ -466,6 +484,7 @@ RaitingGuildHeader:SetBackdrop({
 local RaitingGuildHeaderString = RaitingGuildHeader:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 RaitingGuildHeaderString:SetPoint("CENTER", RaitingGuildHeader, "CENTER", 0, 12)
 RaitingGuildHeaderString:SetText("Рейтинг гильдии")
+RaitingGuildHeaderString:SetFont("Fonts\\ARIALN.TTF", 12)
 
 --GTDR_G_RatingFrame:SetMovable(true)
 GTDR_G_RatingFrame:EnableMouse(true)
@@ -482,6 +501,7 @@ ScrollFrame:SetPoint("BOTTOMRIGHT", -37, 4)
 
 local eb = CreateFrame("Editbox", nil, ScrollFrame)
 eb:SetMultiLine(true)
+eb:SetFont("Fonts\\ARIALN.TTF", 10)
 eb:SetFontObject(GameFontHighlightSmall)
 eb:SetWidth(260)
 eb:SetAutoFocus(false)
@@ -507,7 +527,7 @@ RaitingRaidHeader:SetBackdrop({
 local RaitingRaidHeaderString = RaitingRaidHeader:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 RaitingRaidHeaderString:SetPoint("CENTER", RaitingRaidHeader, "CENTER", 0, 12)
 RaitingRaidHeaderString:SetText("Рейтинг вашего рейда или группы")
-
+RaitingRaidHeaderString:SetFont("Fonts\\ARIALN.TTF", 12)
 --GTDR_P_RatingFrame:SetMovable(true)
 GTDR_P_RatingFrame:EnableMouse(true)
 GTDR_P_RatingFrame:RegisterForDrag("LeftButton")
@@ -521,6 +541,7 @@ scrollFrameParty:SetPoint("BOTTOM", 0, 14)
 scrollFrameParty:SetPoint("BOTTOMRIGHT", -37, 4)
 local eb2 = CreateFrame("Editbox", nil, scrollFrameParty)
 eb2:SetMultiLine(true)
+eb2:SetFont("Fonts\\ARIALN.TTF", 10)
 eb2:SetAutoFocus(false)
 eb2:SetFontObject(GameFontHighlightSmall)
 eb2:SetWidth(260)
@@ -633,10 +654,13 @@ function GTDR_UnitIsParty(name)
 	return nil			
 end
 
-function GTDR_GLOBALS.GTDR_ButtonRollOnLoad(text)	
+function GTDR_GLOBALS.GTDR_ButtonRollOnLoad(text, this)	
 	GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); 
-  GameTooltip:ClearLines();
-  GameTooltip:SetText(text, 1,1,1,0.75)
+  --GameTooltip:ClearLines();
+  if text then
+  	GameTooltip:SetText(text, 1,1,1,0.75)  
+	end
+  this:SetFont("Fonts\\ARIALN.TTF", 11)
   GameTooltip:Show()
 end
 
@@ -644,3 +668,7 @@ function GTDR_GLOBALS.GTDR_ButtonRollOnLeave()
 	 GameTooltip:Hide() 
 end
 
+function GTDR_HelpTextCloseMiniFrame()
+	DEFAULT_CHAT_FRAME:AddMessage("GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r]: Вы скрыли окно мини-фрейма и он больше не покажется. Чтобы его включить заново, используйте команду |cffffcc00/gtdroll mini|r",1,1,1)
+    
+end
