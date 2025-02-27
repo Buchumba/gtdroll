@@ -22,7 +22,7 @@
 			<Layer level="OVERLAY">
 				<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
 		          <Size>
-		            <AbsDimension x="100" y="45" />
+		            <AbsDimension x="162" y="45" />
 				  </Size>
 		          <Anchors>
 				    <Anchor point="TOP">

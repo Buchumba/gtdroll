@@ -42,6 +42,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
+GTDR_ADDON_VER = "1.0.11"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -84,7 +85,7 @@ function GTDR_OnLoad()
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
 	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
-	titleAddon:SetText(GTDR_NAME_ADDON)
+	titleAddon:SetText(GTDR_NAME_ADDON .. " v."..GTDR_ADDON_VER)
 end
 
 function GTDR_OnShow()
