@@ -449,7 +449,7 @@ gtdrEvents:SetScript("OnEvent", function()
 	if event == "PLAYER_LOGIN" and (GTDR_ShowMiniFrame == 1 or GTDR_ShowMiniFrame == nil) then			
 		FrameRollxml:Show()		
 	end
-	if event == "START_LOOT_ROLL" then
+	if event == "START_LOOT_ROLL" and not UnitIsDead("player") then
 		GTDR_AutoRoll(arg1)
 	elseif event == "ZONE_CHANGED_NEW_AREA"	then
 		local zoneName = GetRealZoneText()
