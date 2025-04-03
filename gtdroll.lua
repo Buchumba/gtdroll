@@ -42,7 +42,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.0.12"
+GTDR_ADDON_VER = "1.0.13"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
