@@ -48,15 +48,6 @@ GTDR_DEFAULT_ROS_COEF = 0.5
 --инициализация списка доступных рейдов
 GTDR_AccessInstances = {}
 
-
---[[local function Initialize()
-    --print("MyAddon loaded!")
-end]]
-
---GTDR_GLOBALS.Initialize = Initialize
-
---Initialize()
-
 --мини-фрейм
 function GTDR_MiniInit()
 	if CanViewOfficerNote() then
@@ -204,6 +195,7 @@ function GTDR_SetZones()
 		"Naxxramas",--6
 		"The Barrens",--7 debug only
 		"The Upper Necropolis",--8 (Сапфирон и Кель)
+		"Tower of Karazhan", -- 9 кара-40
 	}
 	
   local i = GetGuildInfoText()
