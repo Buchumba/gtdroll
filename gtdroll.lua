@@ -42,7 +42,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.0.13"
+GTDR_ADDON_VER = "1.0.14"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -494,10 +494,10 @@ ScrollFrame:SetPoint("BOTTOMRIGHT", -37, 4)
 
 local eb = CreateFrame("Editbox", nil, ScrollFrame)
 eb:SetMultiLine(true)
-eb:SetFont("Fonts\\ARIALN.TTF", 10)
 eb:SetFontObject(GameFontHighlightSmall)
-eb:SetWidth(260)
+eb:SetWidth(280)
 eb:SetAutoFocus(false)
+eb:SetFont("Fonts\\ARIALN.TTF", 11)
 scrollFrame:SetScrollChild(eb)
 --конец фрейма
 
@@ -534,10 +534,10 @@ scrollFrameParty:SetPoint("BOTTOM", 0, 14)
 scrollFrameParty:SetPoint("BOTTOMRIGHT", -37, 4)
 local eb2 = CreateFrame("Editbox", nil, scrollFrameParty)
 eb2:SetMultiLine(true)
-eb2:SetFont("Fonts\\ARIALN.TTF", 10)
 eb2:SetAutoFocus(false)
 eb2:SetFontObject(GameFontHighlightSmall)
-eb2:SetWidth(260)
+eb2:SetWidth(280)
+eb2:SetFont("Fonts\\ARIALN.TTF", 11)
 scrollFrameParty:SetScrollChild(eb2)
 --конец фрейма
 
@@ -561,12 +561,12 @@ function GTDR_GetListRaiting(frame, checkRaid)
 	local tempPlayers = {}
 
 	if not checkRaid then
-		frame:SetPoint("TOPLEFT", GtdRollFrame, -295, 0)
+		frame:SetPoint("TOPLEFT", GtdRollFrame, -329, 0)
 	else
-		frame:SetPoint("TOPRIGHT", GtdRollFrame, 295, 0)
+		frame:SetPoint("TOPRIGHT", GtdRollFrame, 329, 0)
 	end
-	frame:SetWidth(300)
-	frame:SetHeight(329)
+	frame:SetWidth(335)
+	frame:SetHeight(333)
 	
 	for y = 1, GetNumGuildMembers(1) do		
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
