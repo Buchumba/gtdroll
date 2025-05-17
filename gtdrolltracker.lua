@@ -110,14 +110,19 @@ GTDR_CloseButton:SetHeight(28)
 GTDR_CloseButton:SetPoint("TOP", GTDR_TableRollFrame, "TOPRIGHT", -18, 6)
 GTDR_CloseButton:SetScript("OnClick", function() 
     DEFAULT_CHAT_FRAME:AddMessage("GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r]: Вы скрыли окно ролл-трекера до следующих бросков. Если вы желаете скрыть его навсегда, нажмите на кнопку |cffffcc00[...]|r вашего мини-фрейма когда ролл-трекер открыт. ",1,1,1)
+    GTDR_ClearRollList()
     GTDR_TableRollFrame:Hide()
 end)
 
 GTDR_ClearButton:SetScript("OnClick", function(self, button, down)    
+    GTDR_ClearRollList()
+end)
+
+function GTDR_ClearRollList()
     rollTable = {}
     sortedTable = {}  
     eb4:SetText("")
-end)
+end
 
 --[[GTDR_CloseButton:SetScript("OnEnter", function(self, button, down)
    GTDR_GLOBALS.GTDR_ButtonRollOnLoad(, this) 
