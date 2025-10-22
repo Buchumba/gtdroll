@@ -42,7 +42,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.0.15"
+GTDR_ADDON_VER = "1.0.16"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -152,7 +152,8 @@ function GTDR_SetFieldMyRoll()
 end
 
 function GTDR_SetFieldFormula()
-	local _pp = math.floor(GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player")))
+	local _officerNote = GTDR_GLOBALS.GTDR_GetOfficerNote(UnitName("player")) or 0
+	local _pp = math.floor(_officerNote) 
 	local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
 	local _text = string.format("|cffaaaaaamin:|r%d*%s,  |cffaaaaaamax:|r%d*%s+100", _pp, _fDigits[1], _pp, _fDigits[2])
 	FieldFormula:SetText("Расчет по формуле: " .. _text  .. "")
