@@ -42,7 +42,7 @@ GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.0.16"
+GTDR_ADDON_VER = "1.1.0"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -75,7 +75,8 @@ function GTDR_OnLoad()
 	fieldAutoNeedZG:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в ZG:", GTDR_HAKKARI_BIJOU, GTDR_COIN))
 	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
 	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
-	fieldAutoNeedBM:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в BM:", GTDR_CORRUPTED_SAND, GTDR_ARCANE_ESSENCE))	
+	fieldAutoNeedCS_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_CORRUPTED_SAND))	
+	fieldAutoNeedAE_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_ARCANE_ESSENCE))	
 	titleAddon:SetText(GTDR_NAME_ADDON .. " v."..GTDR_ADDON_VER)
 end
 
@@ -97,7 +98,8 @@ function GTDR_Init()
 	GTDR_IsZG:SetText(GTDR_GetTitleValue(GTDR_ZG_AUTONEED))
 	GTDR_IsAQ:SetText(GTDR_GetTitleValue(GTDR_AQ_AUTONEED))
 	GTDR_IsKara:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED))
-	GTDR_IsBM:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED))
+	GTDR_IsCS_BM:SetText(GTDR_GetTitleValue(GTDR_CSBM_AUTONEED))
+	GTDR_IsAE_BM:SetText(GTDR_GetTitleValue(GTDR_AEBM_AUTONEED))
 	rmsInfo:SetText(string.format("|cffaaaaaa/rms|r ролл на мейн-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(nil)))	
 	rosInfo:SetText(string.format("|cffaaaaaa/ros|r ролл на офф-спек (|cffaaaaaa%s|r)", GTDR_GetMyRoll(true)))	
 	if CanViewOfficerNote() then
@@ -296,14 +298,24 @@ function GTDR_SetKaraAutoneed()
   this:SetText(GTDR_GetTitleValue(GTDR_KARA_AUTONEED)) 
 end
 
-function GTDR_SetBMAutoneed()  
+function GTDR_SetCSBMAutoneed()  
   local v = this:GetText()    
   if not GTDR_CheckValue(v) then    
-    GTDR_BM_AUTONEED = 1   
+    GTDR_CSBM_AUTONEED = 1   
   else    
-    GTDR_BM_AUTONEED = 0   
+    GTDR_CSBM_AUTONEED = 0   
   end
-  this:SetText(GTDR_GetTitleValue(GTDR_BM_AUTONEED)) 
+  this:SetText(GTDR_GetTitleValue(GTDR_CSBM_AUTONEED)) 
+end
+
+function GTDR_SetAEBMAutoneed()  
+  local v = this:GetText()    
+  if not GTDR_CheckValue(v) then    
+    GTDR_AEBM_AUTONEED = 1   
+  else    
+    GTDR_AEBM_AUTONEED = 0   
+  end
+  this:SetText(GTDR_GetTitleValue(GTDR_AEBM_AUTONEED)) 
 end
 
 function GTDR_CheckValue(value)  
@@ -315,7 +327,7 @@ end
 
 function GTDR_GetTitleValue(value)
   if value == 1 then
-    return "on"
+    return "|cff84ff00on|r"
   else
     return "off"
   end
@@ -420,15 +432,20 @@ function GTDR_AutoRoll(id)
 		or (name == GTDR_ARCANE_ESSENCE and GTDR_KARA_AUTONEED ==1) then		
 			RollOnLoot(id, 1);						
 		end
-	elseif GetRealZoneText() == THE_BLACK_MORASS and GTDR_BM_AUTONEED == 1 then
+	elseif GetRealZoneText() == THE_BLACK_MORASS then
 		local _, name, _, quality = GetLootRollItemInfo(id);		
 		--if string.find(name , GTDR_CORRUPTED_SAND) or name == GTDR_ARCANE_ESSENCE then
-		if name == GTDR_CORRUPTED_SAND or name == GTDR_ARCANE_ESSENCE then
+		if name == GTDR_CORRUPTED_SAND and GTDR_CSBM_AUTONEED == 1 then
 			RollOnLoot(id, 1);			
 			if StaticPopup1Button1 then 
 				StaticPopup1Button1:Click()
 			end			
-		end		
+		elseif name == GTDR_ARCANE_ESSENCE and GTDR_AEBM_AUTONEED == 1 then
+			RollOnLoot(id, 1);			
+			if StaticPopup1Button1 then 
+				StaticPopup1Button1:Click()
+			end			
+		end				
 	end	
 end
 

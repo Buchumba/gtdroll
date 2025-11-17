@@ -1,6 +1,6 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">	
 	<Frame name="GtdRollFrame" parent="UIParent" toplevel="true" hidden="true" movable="true" frameStrata="MEDIUM" enableMouse="true" enableKeyboard="true">
-		<Size x="320" y="350" />
+		<Size x="320" y="370" />
 		<Anchors>
 			<Anchor point="CENTER" />
 		</Anchors>
@@ -175,7 +175,7 @@
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="7" y="122" />
+							<Offset x="7" y="137" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -188,7 +188,7 @@
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="-17" y="107" />
+							<Offset x="-17" y="122" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
@@ -201,24 +201,37 @@
 					<Size x="220" y="30"/>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="7" y="92" />
+							<Offset x="9" y="107" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
-				<FontString inherits="GameFontNormalSmall" Size="10" font="Fonts\ARIALN.TTF" name="fieldAutoNeedBM" text="">
+				<FontString inherits="GameFontNormalSmall" Size="10" font="Fonts\ARIALN.TTF" name="fieldAutoNeedCS_BM" text="">
 					<Size x="250" y="30"/>
 					<FontHeight>
 						<AbsValue val="11" />
 					</FontHeight>
 					<Anchors>
 						<Anchor point="BOTTOMLEFT">
-							<Offset x="15" y="77" />
+							<Offset x="5" y="92" />
 						</Anchor>						
 					</Anchors>
 				</FontString>
 			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormalSmall" Size="10" font="Fonts\ARIALN.TTF" name="fieldAutoNeedAE_BM" text="">
+					<Size x="250" y="30"/>
+					<FontHeight>
+						<AbsValue val="11" />
+					</FontHeight>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset x="7" y="77" />
+						</Anchor>						
+					</Anchors>
+				</FontString>
+			</Layer>			
 			<Layer level="OVERLAY">
 				<FontString inherits="GameFontDisableSmall" font="Fonts\ARIALN.TTF" text="Повторное нажатие на рейтинг меняет тип сортировки: pp, имя. Так же, вы можете скопировать рейтинг при помощи команд: Ctrl+A и Ctrl+C">
 					<FontHeight>
@@ -287,7 +300,7 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="129" />
+						<Offset x="-18" y="144" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -300,7 +313,7 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="114" />
+						<Offset x="-18" y="128.5" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -313,7 +326,7 @@
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="99" />
+						<Offset x="-18" y="113.5" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
@@ -322,16 +335,29 @@
 					</OnClick>
 				</Scripts>
 			</Button>
-			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsBM">
+			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsCS_BM">
 				<Size x="25" y="18" />
 				<Anchors>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-18" y="84" />
+						<Offset x="-18" y="97" />
 					</Anchor>
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						GTDR_SetBMAutoneed()
+						GTDR_SetCSBMAutoneed()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button inherits="UIPanelButtonTemplate" text="off"  name="GTDR_IsAE_BM">
+				<Size x="25" y="18" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-18" y="82" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GTDR_SetAEBMAutoneed()
 					</OnClick>
 				</Scripts>
 			</Button>
