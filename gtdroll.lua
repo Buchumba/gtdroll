@@ -36,13 +36,14 @@ local SortField = "pp"--сортировка по умолчанию по progre
 local P_SortField = "pp"--сортировка по умолчанию по progress-points рейда\пати
 local THE_BLACK_MORASS = "The Black Morass"
 local ZUL_GURUB = "Zul'Gurub"
+local AQ20 = "Ruins of Ahn'Qiraj"
 GTDR_ARCANE_ESSENCE = "Arcane Essence"
 GTDR_HAKKARI_BIJOU = "Hakkari Bijou"
 GTDR_CORRUPTED_SAND = "Corrupted Sand"
 GTDR_COIN = "Coin"
 GTDR_SCARAB = "Scarab"
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.1.0"
+GTDR_ADDON_VER = "1.1.2"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -199,6 +200,8 @@ function GTDR_SetZones()
 		"The Barrens",--7 debug only
 		"The Upper Necropolis",--8 (Сапфирон и Кель)
 		"Tower of Karazhan", -- 9 кара-40
+		ZUL_GURUB, -- 10
+		AQ20, -- 11
 	}
 	
   local i = GetGuildInfoText()
@@ -681,5 +684,4 @@ end
 
 function GTDR_HelpTextCloseMiniFrame()
 	DEFAULT_CHAT_FRAME:AddMessage("GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r]: Вы скрыли окно мини-фрейма и он больше не покажется. Чтобы его включить заново, используйте команду |cffffcc00/gtdroll mini|r",1,1,1)
-    
 end
