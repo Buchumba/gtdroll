@@ -11,12 +11,20 @@ local blueColor = "|cff66ffff"
 -- Создаем основной фрейм для мониторинга ролов
 local GTDR_FrameRollHundler = CreateFrame("Frame")
 GTDR_FrameRollHundler:RegisterEvent("CHAT_MSG_SYSTEM")
+
 -- Функция для обработки событий ролов
 GTDR_FrameRollHundler:SetScript("OnEvent", function()
     if event == "CHAT_MSG_SYSTEM" then
         local message = arg1
-        -- Проверяем, содержит ли сообщение информацию о броске
-        local _,_,player, roll, minRoll, maxRoll = string.find(message, "(%a+) rolls (%d+) %((%d+)%-(%d+)%)")
+        
+        -- Абсолютно языконезависимый паттерн для Lua 5.0:
+        -- ^([^%s]+) — захватывает первое слово (ник игрока на любом языке)
+        -- %s+ — пробел(ы)
+        -- .- — пропускает любой текст/глагол (rolls / выбросил и т.д.)
+        -- (%d+) — выпавшее число
+        -- %((%d+)%-(%d+)%) — диапазон в скобках (мин-макс)
+        local _, _, player, roll, minRoll, maxRoll = string.find(message, "^([^%s]+)%s+.-(%d+)%s*%((%d+)%-(%d+)%)")
+
         if player and roll then
             if not GTDR_TableRollFrame:IsShown() and GTDR_ShowRollTracker then
                 GTDR_TableRollFrame:Show()
@@ -34,7 +42,6 @@ end)
 function GTDR_UpdateRollTable()
     -- Очищаем предыдущие данные 
     for i = 1, table.getn(rollTable) do
-        message(rollTable[i])
         rollTable[i] = nil
     end
     -- Сортируем таблицу по значению броска
@@ -124,13 +131,6 @@ function GTDR_ClearRollList()
     eb4:SetText("")
 end
 
---[[GTDR_CloseButton:SetScript("OnEnter", function(self, button, down)
-   GTDR_GLOBALS.GTDR_ButtonRollOnLoad(, this) 
-end)
-GTDR_CloseButton:SetScript("OnLeave", function(self, button, down)
-   GTDR_GLOBALS.GTDR_ButtonRollOnLeave()
-end)]]
-
 -- Функция для обновления текста таблицы ролов
 function GTDR_UpdateTableText()
     local text = ""
@@ -159,9 +159,9 @@ function GTDR_SetColorRoll(nickname, _rollMin, _rollMax)
         _min = 1;
     end
     
-    if _rollMin == 1 and _rollMax == 50 then
+    if _rollMin == 1 and _rollMax == 98 then
         return blueColor, "[rxmg]"
-    elseif _rollMin == 1 and _rollMax == 70 then
+    elseif _rollMin == 1 and _rollMax == 99 then
         return yellowColor, "[os]"
     elseif _rollMin == 1 and _rollMax == 100 then
         return "|cffffffff", ""    

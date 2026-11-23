@@ -11,6 +11,32 @@ GTDR_GLOBALS:SetScript("OnEvent", function()
     end    
 end)
 
+-- ====================================================================== --
+-- ====== БЛОК ИНИЦИАЛИЗАЦИИ ГИЛЬДЕЙСКОГО РОСТЕРА ПРИ ЗАХОДЕ В ИГРУ ===== --
+-- ====================================================================== --
+local GTDR_InitFrame = CreateFrame("Frame")
+GTDR_InitFrame:RegisterEvent("GUILD_ROSTER_UPDATE")
+GTDR_InitFrame:RegisterEvent("PLAYER_LOGIN")
+GTDR_InitFrame:SetScript("OnEvent", function()
+    -- Можно дополнительно принудительно запросить обновление гильдии при входе
+    if event == "PLAYER_LOGIN" then
+        GuildRoster() 
+    end
+
+    -- Когда данные гильдии подгрузились (GetNumGuildMembers(1) станет больше 0)
+    if event == "GUILD_ROSTER_UPDATE" then
+        local count = GetNumGuildMembers(1)
+        if count > 0 then
+            -- Данные загружены! Выполняем инициализацию
+            if GTDR_GLOBALS and GTDR_GLOBALS.init then
+                GTDR_GLOBALS.init()
+            end
+            -- Отписываемся от события, чтобы оно не срабатывало лишний раз при каждом изменении в гильдии
+            this:UnregisterEvent("GUILD_ROSTER_UPDATE")
+        end
+    end
+end)
+
 function GTDR_GLOBALS.init()
 	DEFAULT_CHAT_FRAME:AddMessage(GTDR_NAME_ADDON.." loaded.")
 	GTDR_GLOBALS.GTDR_GetOfficerNote(nil)
@@ -29,21 +55,53 @@ SLASH_GTDRRESET1 = "/reset";
 SLASH_GTDRRESET2 = "/resetinstance";
 SLASH_GTDRRESET3 = "/resetinstances";
 SlashCmdList["GTDRRESET"] = ResetInstances;
+
 local text_access_error = "К сожалению у вас |cffff0000нет доступа|r для просмотра офицерской заметки. ГМ гильдии может предоставить эти права."
 local color_prefix_white = "|cffffffff"
 GTDR_GLOBALS.color_prefix_orange = "|cffffaa00"
 local SortField = "pp"--сортировка по умолчанию по progress-points все гильдии
 local P_SortField = "pp"--сортировка по умолчанию по progress-points рейда\пати
-local THE_BLACK_MORASS = "The Black Morass"
-local ZUL_GURUB = "Zul'Gurub"
-local AQ20 = "Ruins of Ahn'Qiraj"
-GTDR_ARCANE_ESSENCE = "Arcane Essence"
-GTDR_HAKKARI_BIJOU = "Hakkari Bijou"
-GTDR_CORRUPTED_SAND = "Corrupted Sand"
-GTDR_COIN = "Coin"
-GTDR_SCARAB = "Scarab"
+
+-- Определение локализации клиента (enUS / ruRU и др.)
+local locale = GetLocale()
+local isRU = (locale == "ruRU")
+
+-- Двуязычные константы предметов и зон
+local ITEMS = {
+    ArcaneEssence = { en = "Arcane Essence", ru = "Arcane Essence" },
+    HakkariBijou  = { en = "Hakkari Bijou",  ru = "брелок Хаккари" },
+    CorruptedSand = { en = "Corrupted Sand", ru = "Corrupted Sand" },
+    Coin          = { en = "Coin",           ru = "Монета" },
+    Scarab        = { en = "Scarab",         ru = "Скарабей" },
+}
+
+local ZONES = {
+    Onyxia         = { en = "Onyxia's Lair",        ru = "Логово Ониксии" },
+    MoltenCore     = { en = "Molten Core",          ru = "Огненные Недра" },
+    EmeraldSanctum = { en = "Emerald Sanctum",      ru = "Изумрудное Святилище" },
+    BlackwingLair  = { en = "Blackwing Lair",       ru = "Логово Крыла Тьмы" },
+    AhnQiraj       = { en = "Ahn'Qiraj",            ru = "Храм Ан'Киража" },
+    Naxxramas      = { en = "Naxxramas",            ru = "Наксрамас" },
+    Barrens        = { en = "The Barrens",          ru = "Степные земли" },
+    UpperNecropolis= { en = "The Upper Necropolis", ru = "Верхний некрополь" },
+    Karazhan       = { en = "Tower of Karazhan",    ru = "Башня Каражана" },
+    ZulGurub       = { en = "Zul'Gurub",            ru = "Зул'Гуруб" },
+    AQ20           = { en = "Ruins of Ahn'Qiraj",   ru = "Руины Ан'Киража" },
+    BlackMorass    = { en = "The Black Morass",     ru = "Черные Топи" },
+}
+
+THE_BLACK_MORASS = ZONES.BlackMorass
+ZUL_GURUB = ZONES.ZulGurub
+AQ20 = ZONES.AQ20
+
+GTDR_ARCANE_ESSENCE = ITEMS.ArcaneEssence
+GTDR_HAKKARI_BIJOU  = ITEMS.HakkariBijou
+GTDR_CORRUPTED_SAND = ITEMS.CorruptedSand
+GTDR_COIN           = ITEMS.Coin
+GTDR_SCARAB         = ITEMS.Scarab
+
 GTDR_NAME_ADDON = "GTD"..GTDR_GLOBALS.color_prefix_orange.."ROLL|r"
-GTDR_ADDON_VER = "1.1.2"
+GTDR_ADDON_VER = "1.2"
 GTDR_DEFAULT_ROS_COEF = 0.5
 
 --инициализация списка доступных рейдов
@@ -73,11 +131,11 @@ function GTDR_OnLoad()
 	this:RegisterEvent("ADDON_LOADED");		
 	this:RegisterEvent("PLAYER_ENTERING_WORLD");		
 	NickNameField:SetText(UnitName("player"))	  
-	fieldAutoNeedZG:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в ZG:", GTDR_HAKKARI_BIJOU, GTDR_COIN))
-	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB))
-	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE))
-	fieldAutoNeedCS_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_CORRUPTED_SAND))	
-	fieldAutoNeedAE_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_ARCANE_ESSENCE))	
+	fieldAutoNeedZG:SetText(string.format("Автосбор |cffffffff%s|r и |cffffffff%s|r в ZG:", GTDR_HAKKARI_BIJOU[locale == "ruRU" and "ru" or "en"], GTDR_COIN[locale == "ruRU" and "ru" or "en"]))
+	fieldAutoNeedAQ:SetText(string.format("Автосбор |cffffffff%s|r в AQ20:", GTDR_SCARAB[locale == "ruRU" and "ru" or "en"]))
+	fieldAutoNeedKara:SetText(string.format("Автосбор |cffffffff%s|r в Kara-10:", GTDR_ARCANE_ESSENCE[locale == "ruRU" and "ru" or "en"]))
+	fieldAutoNeedCS_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_CORRUPTED_SAND[locale == "ruRU" and "ru" or "en"]))	
+	fieldAutoNeedAE_BM:SetText(string.format("Автосбор |cffffffff%s|r в Black Morass:", GTDR_ARCANE_ESSENCE[locale == "ruRU" and "ru" or "en"]))	
 	titleAddon:SetText(GTDR_NAME_ADDON .. " v."..GTDR_ADDON_VER)
 end
 
@@ -169,7 +227,6 @@ function GTDR_GLOBALS.GTDR_GetOfficerNote(nickname)
 		for y = 1, GetNumGuildMembers(1) do
 			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
 			if type(tonumber(officernote)) == "number" and name == nickname then
-				--table.insert(players, {name, tonumber(officernote), rank})		
 				return tonumber(officernote)
 			end			
 		end
@@ -181,7 +238,7 @@ function GTDR_Split(inputstr, sep)
     sep = "%s"
   end
   local t={}
-  local _string_find = --[[string.gmatch or]] string.gfind
+  local _string_find = string.gfind
   local _searchedSplit = _string_find(inputstr, "([^"..sep.."]+)") 
   for str in _searchedSplit do
     table.insert(t, str)
@@ -190,18 +247,19 @@ function GTDR_Split(inputstr, sep)
 end
 
 function GTDR_SetZones()		
+	-- Сохраняем числовые ключи 1-11 для совместимости с guild info
 	local _allZones = {		
-		"Onyxia's Lair",--1
-		"Molten Core",--2
-		"Emerald Sanctum",--3
-		"Blackwing Lair",--4
-		"Ahn'Qiraj",--5
-		"Naxxramas",--6
-		"The Barrens",--7 debug only
-		"The Upper Necropolis",--8 (Сапфирон и Кель)
-		"Tower of Karazhan", -- 9 кара-40
-		ZUL_GURUB, -- 10
-		AQ20, -- 11
+		ZONES.Onyxia,         -- 1
+		ZONES.MoltenCore,     -- 2
+		ZONES.EmeraldSanctum, -- 3
+		ZONES.BlackwingLair,  -- 4
+		ZONES.AhnQiraj,       -- 5
+		ZONES.Naxxramas,      -- 6
+		ZONES.Barrens,        -- 7 debug only
+		ZONES.UpperNecropolis,-- 8 (Сапфирон и Кель)
+		ZONES.Karazhan,       -- 9 кара-40
+		ZONES.ZulGurub,       -- 10
+		ZONES.AQ20,           -- 11
 	}
 	
   local i = GetGuildInfoText()
@@ -210,15 +268,15 @@ function GTDR_SetZones()
     if i == "" then
       return nil
     else    	
-    	local _string_find = --[[string.gmatch or]] string.find
+    	local _string_find = string.find
     	local _, _, _ids = _string_find(i, "=(%d+[,]?.*)=");
-			if _ids == nil then
+		if _ids == nil then
    			DEFAULT_CHAT_FRAME:AddMessage("|cFFFF00FFОтсутствует информация о доступных подземельях!|r")
    			return nil
-			end
+		end
 	  	local _asd = GTDR_Split(_ids,",")
-		  local _countArray = table.getn(_asd);	 	  		  	
-		  for x = 1, _countArray do	  	 	
+		local _countArray = table.getn(_asd);	 	  		  	
+		for x = 1, _countArray do	  	 	
 		   	table.insert(GTDR_AccessInstances, _allZones[tonumber(_asd[x])])	  	 	
 	  	end  		  	
 		end		
@@ -227,8 +285,14 @@ end
 
 function GTDR_IsZone()
 	local _accessInstances = GTDR_AccessInstances	
+	local currentZone = GetRealZoneText()
 	for x = 1, table.getn(_accessInstances) do		
-		if _accessInstances[x] == GetRealZoneText() then
+		local zoneData = _accessInstances[x]
+		if type(zoneData) == "table" then
+			if zoneData.en == currentZone or zoneData.ru == currentZone then
+				return true
+			end
+		elseif zoneData == currentZone then
 			return true
 		end
 	end
@@ -242,7 +306,7 @@ function GTDR_GLOBALS.GTDR_GetDigitsF()
       return {0, 0}
     else      
 	  local _, _, _min, _max = string.find(i, ":(%d+[.]%d+)[,]+(%d+[.]%d+):");
-    if _min and _max then
+      if _min and _max then
         return {tonumber(_min), tonumber(_max)}
 	  else 
 		  return {0, 0}
@@ -260,7 +324,7 @@ function GTDR_GLOBALS.GTDR_GetCoefRos()
       return GTDR_DEFAULT_ROS_COEF
     else      
 	  local _, _, _min = string.find(i, "@(%d+[.]%d+)@");
-    if _min then
+      if _min then
         return tonumber(_min)
 	  else 
 		  return GTDR_DEFAULT_ROS_COEF
@@ -340,8 +404,8 @@ function GTDR_ShowHelp()
 	DEFAULT_CHAT_FRAME:AddMessage("Аддон `gtdroll` гильдии \"Going to Death\". Предназначен для модифицированного рола (MS,OS,Transmg) с учетом progress-points в рейдах на 40 человек.",1,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage("Список команд:",0,1,0);
 	DEFAULT_CHAT_FRAME:AddMessage(string.format("/rms - рол на мейн-спек (%s).", GTDR_GetMyRoll(nil)),1,1,1);
-	DEFAULT_CHAT_FRAME:AddMessage("/ros - рол на офф-спек (1-70).",1,1,1);
-	DEFAULT_CHAT_FRAME:AddMessage("/rxmg - рол на трансмог (1-50).",1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage("/ros - рол на офф-спек (1-99).",1,1,1);
+	DEFAULT_CHAT_FRAME:AddMessage("/rxmg - рол на трансмог (1-98).",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/reload - перезагрузка интерфейса.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/reset, /resetinstance, /resetinstances - перезагрузка подземелий.",1,1,1);
 	DEFAULT_CHAT_FRAME:AddMessage("/gtdroll - основное окно аддона.",1,1,1);
@@ -371,7 +435,7 @@ end
 
 function GTDR_RollMSorOSWithoutPP(isRos)
 	if isRos then
-		RandomRoll(1,70);
+		RandomRoll(1,99);
 	else
 		RandomRoll(1,100);
 	end
@@ -380,17 +444,15 @@ end
 --МС или ОС ролы
 function GTDR_Roll(isRos)
 	GTDR_SetZones()
-	local _realNameZone = GetRealZoneText()
 	local _guildName, _guildRankName, _guildRankIndex = GetGuildInfo("Player");
-	local _playerName = UnitName("Player");
-
-	if GTDR_IsZone() then					
-		for i = 1, GetNumGuildMembers(1) do
-			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);			
+	local _playerName = UnitName("Player");  
+	if GTDR_IsZone() then		
+		for i = 1, GetNumGuildMembers(1) do			
+			local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(i);
 			officernote = tonumber(officernote)	
 			if name == _playerName then				
 				if type(officernote) == "number" then
-					if isRos then -- если бросок на офф-спек, то пп рейдера умножаем на модификатор, указанный в настройках гильд-инфо (по умолчанию 0.5)
+					if isRos then
 						officernote = officernote * GTDR_GLOBALS.GTDR_GetCoefRos()
 					end
 					local _fDigits = GTDR_GLOBALS.GTDR_GetDigitsF();
@@ -398,7 +460,7 @@ function GTDR_Roll(isRos)
 					local _max = math.floor(officernote * _fDigits[2] + 100)					
 					if _min < 1 then
 						_min = 1;
-					end
+					end							
 					RandomRoll(_min,_max);
 				else
 					GTDR_RollMSorOSWithoutPP(isRos)
@@ -420,30 +482,81 @@ function SlashCmdList.GTDRROS(msg, editbox)
 end
 
 function SlashCmdList.GTDRRXMG(msg, editbox)
-	RandomRoll(1,50);
+	RandomRoll(1,98);
+end
+
+-- Приводим латиницу и кириллицу к нижнему регистру для поиска предметов.
+local GTDR_CYRILLIC_LOWER = {
+    ["А"] = "а", ["Б"] = "б", ["В"] = "в", ["Г"] = "г",
+    ["Д"] = "д", ["Е"] = "е", ["Ё"] = "ё", ["Ж"] = "ж",
+    ["З"] = "з", ["И"] = "и", ["Й"] = "й", ["К"] = "к",
+    ["Л"] = "л", ["М"] = "м", ["Н"] = "н", ["О"] = "о",
+    ["П"] = "п", ["Р"] = "р", ["С"] = "с", ["Т"] = "т",
+    ["У"] = "у", ["Ф"] = "ф", ["Х"] = "х", ["Ц"] = "ц",
+    ["Ч"] = "ч", ["Ш"] = "ш", ["Щ"] = "щ", ["Ъ"] = "ъ",
+    ["Ы"] = "ы", ["Ь"] = "ь", ["Э"] = "э", ["Ю"] = "ю",
+    ["Я"] = "я",
+}
+
+local function GTDR_LowerString(value)
+    if not value then return nil end
+
+    -- string.lower обрабатывает латиницу, а кириллицу переводим отдельно.
+    value = string.lower(value)
+
+    for upper, lower in pairs(GTDR_CYRILLIC_LOWER) do
+        value = string.gsub(value, upper, lower)
+    end
+
+    return value
+end
+
+-- Универсальная вспомогательная функция проверки совпадения предмета (для EN и RU)
+local function ItemMatch(itemName, itemTable)
+    if not itemName then return false end
+
+    local lowerItemName = GTDR_LowerString(itemName)
+    local lowerEn = GTDR_LowerString(itemTable.en)
+    local lowerRu = GTDR_LowerString(itemTable.ru)
+
+    return (lowerEn and string.find(lowerItemName, lowerEn, 1, true))
+        or (lowerRu and string.find(lowerItemName, lowerRu, 1, true))
+        or false
+end
+
+local function ExactItemMatch(itemName, itemTable)
+    if not itemName then return false end
+
+    local lowerItemName = GTDR_LowerString(itemName)
+    return (lowerItemName == GTDR_LowerString(itemTable.en)
+        or lowerItemName == GTDR_LowerString(itemTable.ru))
+end
+
+local function ZoneMatch(zoneName, zoneTable)
+    if not zoneName then return false end
+    return (zoneName == zoneTable.en or zoneName == zoneTable.ru)
 end
 
 --функция авторола NEED в подземельях
 function GTDR_AutoRoll(id)
-	local  inInstance, instanceType = IsInInstance()
+	local inInstance, instanceType = IsInInstance()
 	local inRaidInstance  = (instanceType == 'raid');	
 	if inRaidInstance then	
 		local _, name, _, quality = GetLootRollItemInfo(id);			
-		if (string.find(name , GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
-		or (string.find(name , GTDR_COIN) and GTDR_ZG_AUTONEED == 1)
-		or (string.find(name , GTDR_SCARAB) and GTDR_AQ_AUTONEED ==1)
-		or (name == GTDR_ARCANE_ESSENCE and GTDR_KARA_AUTONEED ==1) then		
+		if (ItemMatch(name, GTDR_HAKKARI_BIJOU) and GTDR_ZG_AUTONEED == 1)
+		or (ItemMatch(name, GTDR_COIN) and GTDR_ZG_AUTONEED == 1)
+		or (ItemMatch(name, GTDR_SCARAB) and GTDR_AQ_AUTONEED == 1)
+		or (ExactItemMatch(name, GTDR_ARCANE_ESSENCE) and GTDR_KARA_AUTONEED == 1) then		
 			RollOnLoot(id, 1);						
 		end
-	elseif GetRealZoneText() == THE_BLACK_MORASS then
+	elseif ZoneMatch(GetRealZoneText(), THE_BLACK_MORASS) then
 		local _, name, _, quality = GetLootRollItemInfo(id);		
-		--if string.find(name , GTDR_CORRUPTED_SAND) or name == GTDR_ARCANE_ESSENCE then
-		if name == GTDR_CORRUPTED_SAND and GTDR_CSBM_AUTONEED == 1 then
+		if ExactItemMatch(name, GTDR_CORRUPTED_SAND) and GTDR_CSBM_AUTONEED == 1 then
 			RollOnLoot(id, 1);			
 			if StaticPopup1Button1 then 
 				StaticPopup1Button1:Click()
 			end			
-		elseif name == GTDR_ARCANE_ESSENCE and GTDR_AEBM_AUTONEED == 1 then
+		elseif ExactItemMatch(name, GTDR_ARCANE_ESSENCE) and GTDR_AEBM_AUTONEED == 1 then
 			RollOnLoot(id, 1);			
 			if StaticPopup1Button1 then 
 				StaticPopup1Button1:Click()
@@ -466,11 +579,17 @@ gtdrEvents:SetScript("OnEvent", function()
 		GTDR_AutoRoll(arg1)
 	elseif event == "ZONE_CHANGED_NEW_AREA"	then
 		local zoneName = GetRealZoneText()
-		--message("Zone Name: "..zoneName)
-		if zoneName == THE_BLACK_MORASS and GTDR_BM_AUTONEED == 1 then
-			GTDR_AutoLootAnnounce(THE_BLACK_MORASS, "'"..GTDR_CORRUPTED_SAND .. "' и '" .. GTDR_ARCANE_ESSENCE.."'")
-		elseif zoneName == ZUL_GURUB and GTDR_ZG_AUTONEED == 1 then
-			GTDR_AutoLootAnnounce(ZUL_GURUB, "'"..GTDR_HAKKARI_BIJOU .. "' и '" .. GTDR_COIN.."'")
+		local currentZoneName = isRU and ZONES.BlackMorass.ru or ZONES.BlackMorass.en
+		local zgZoneName = isRU and ZONES.ZulGurub.ru or ZONES.ZulGurub.en
+		
+		if ZoneMatch(zoneName, THE_BLACK_MORASS) and GTDR_BM_AUTONEED == 1 then
+			local sandName = isRU and GTDR_CORRUPTED_SAND.ru or GTDR_CORRUPTED_SAND.en
+			local arcaneName = isRU and GTDR_ARCANE_ESSENCE.ru or GTDR_ARCANE_ESSENCE.en
+			GTDR_AutoLootAnnounce(zoneName, "'"..sandName .. "' и '" .. arcaneName.."'")
+		elseif ZoneMatch(zoneName, ZUL_GURUB) and GTDR_ZG_AUTONEED == 1 then
+			local bijouName = isRU and GTDR_HAKKARI_BIJOU.ru or GTDR_HAKKARI_BIJOU.en
+			local coinName = isRU and GTDR_COIN.ru or GTDR_COIN.en
+			GTDR_AutoLootAnnounce(zoneName, "'"..bijouName .. "' и '" .. coinName.."'")
 		end
 	end
 end)
@@ -500,14 +619,11 @@ RaitingGuildHeaderString:SetPoint("CENTER", RaitingGuildHeader, "CENTER", 0, 12)
 RaitingGuildHeaderString:SetText("Рейтинг гильдии")
 RaitingGuildHeaderString:SetFont("Fonts\\ARIALN.TTF", 12)
 
---GTDR_G_RatingFrame:SetMovable(true)
 GTDR_G_RatingFrame:EnableMouse(true)
 GTDR_G_RatingFrame:RegisterForDrag("LeftButton")
---GTDR_G_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
 GTDR_G_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
 GTDR_G_RatingFrame:Hide()
 
--- Create the scrolling parent frame and size it to fit inside the texture
 local ScrollFrame = CreateFrame("ScrollFrame", "scrollFrame", GTDR_G_RatingFrame, "UIPanelScrollFrameTemplate")
 ScrollFrame:SetPoint("TOPLEFT", 14, -27)
 ScrollFrame:SetPoint("BOTTOM", 0, 14)
@@ -520,7 +636,6 @@ eb:SetWidth(280)
 eb:SetAutoFocus(false)
 eb:SetFont("Fonts\\ARIALN.TTF", 11)
 scrollFrame:SetScrollChild(eb)
---конец фрейма
 
 --блок инициализации фрейма рейтинга для пати\рейда
 GTDR_P_RatingFrame = CreateFrame("Frame", "GTDR_P_RatingFrame", GtdRollFrame)
@@ -542,13 +657,12 @@ local RaitingRaidHeaderString = RaitingRaidHeader:CreateFontString(nil, "OVERLAY
 RaitingRaidHeaderString:SetPoint("CENTER", RaitingRaidHeader, "CENTER", 0, 12)
 RaitingRaidHeaderString:SetText("Рейтинг вашего рейда или группы")
 RaitingRaidHeaderString:SetFont("Fonts\\ARIALN.TTF", 12)
---GTDR_P_RatingFrame:SetMovable(true)
+
 GTDR_P_RatingFrame:EnableMouse(true)
 GTDR_P_RatingFrame:RegisterForDrag("LeftButton")
---GTDR_P_RatingFrame:SetScript("OnDragStart", function() this:StartMoving() end)
 GTDR_P_RatingFrame:SetScript("OnDragStop", function() this:StopMovingOrSizing()end)
 GTDR_P_RatingFrame:Hide()
--- Create the scrolling parent frame and size it to fit inside the texture
+
 local scrollFrameParty = CreateFrame("ScrollFrame", "scrollFrameParty", GTDR_P_RatingFrame, "UIPanelScrollFrameTemplate")
 scrollFrameParty:SetPoint("TOPLEFT", 14, -27)
 scrollFrameParty:SetPoint("BOTTOM", 0, 14)
@@ -560,9 +674,7 @@ eb2:SetFontObject(GameFontHighlightSmall)
 eb2:SetWidth(280)
 eb2:SetFont("Fonts\\ARIALN.TTF", 11)
 scrollFrameParty:SetScrollChild(eb2)
---конец фрейма
 
---открытие или закрытие окна рейтинга гильдии или рейда
 function GTDR_OpenRatingScrollFrame(frame, checkRaid)	
 	if frame and frame:IsShown() then
 		frame:Hide()
@@ -572,11 +684,9 @@ function GTDR_OpenRatingScrollFrame(frame, checkRaid)
 	end	
 end
 
---формирование данных рейтинга игроков гильдии
 function GTDR_GetListRaiting(frame, checkRaid)
 	local formula = GTDR_GLOBALS.GTDR_GetDigitsF()
 	local coefRos = GTDR_GLOBALS.GTDR_GetCoefRos()
-	local f, _, _ = GameFontNormal:GetFont() 	
 	local players = {}
 	local textRating = ""
 	local tempPlayers = {}
@@ -592,25 +702,25 @@ function GTDR_GetListRaiting(frame, checkRaid)
 	for y = 1, GetNumGuildMembers(1) do		
 		local name, rank, rankIndex, level, class, zone, note, officernote, online, status = GetGuildRosterInfo(y);
 		if not checkRaid and type(tonumber(officernote)) == "number" then
-			table.insert(players, {name, tonumber(officernote), rank})--вся гильдия
+			table.insert(players, {name, tonumber(officernote), rank})
 		elseif checkRaid and type(tonumber(officernote)) == "number" and GTDR_UnitIsRaid(name) then
-			table.insert(players, {name, tonumber(officernote), rank})--только рейд
+			table.insert(players, {name, tonumber(officernote), rank})
 		elseif checkRaid and type(tonumber(officernote)) == "number" and (GTDR_UnitIsParty(name) or (UnitInParty("player") and UnitName("player") == name)) then
-			table.insert(players, {name, tonumber(officernote), rank})--только пати
+			table.insert(players, {name, tonumber(officernote), rank})
 		end	
 	end
 	
 	tempPlayers = players
 	if SortField == nil or SortField == "pp" then
-		table.sort(tempPlayers, function(a, b) return a[2] < b[2] end)	-- 1pp < 40pp	
+		table.sort(tempPlayers, function(a, b) return a[2] < b[2] end)	
 	elseif SortField == "name" then
-		table.sort(tempPlayers, function(a, b) return a[1] > b[1] end)	-- A > Z
+		table.sort(tempPlayers, function(a, b) return a[1] > b[1] end)	
 	end
     
 	local countString = table.getn(tempPlayers)
 	
-	eb:SetHeight(countString*13)--установим высоту скролла для гильдии	
-	eb2:SetHeight(countString*13)--установим высоту скролла для пати\рейда
+	eb:SetHeight(countString*13)	
+	eb2:SetHeight(countString*13)	
 	
 	local _min, _max
 	for x = 1, countString do 
@@ -638,7 +748,6 @@ function GTDR_GetListRaiting(frame, checkRaid)
 		SortField = "pp"
 	end
 	
-	--запись рейтинга во фрейм скроллинга
 	if not checkRaid then
 		eb:SetText(textRating)
 	else
@@ -670,16 +779,15 @@ end
 
 function GTDR_GLOBALS.GTDR_ButtonRollOnLoad(text, this)	
 	GameTooltip:SetOwner(this, "ANCHOR_CURSOR"); 
-  --GameTooltip:ClearLines();
-  if text then
-  	GameTooltip:SetText(text, 1,1,1,0.75)  
+	if text then
+		GameTooltip:SetText(text, 1,1,1,0.75)  
 	end
-  this:SetFont("Fonts\\ARIALN.TTF", 11)
-  GameTooltip:Show()
+	this:SetFont("Fonts\\ARIALN.TTF", 11)
+	GameTooltip:Show()
 end
 
 function GTDR_GLOBALS.GTDR_ButtonRollOnLeave()
-	 GameTooltip:Hide() 
+	GameTooltip:Hide() 
 end
 
 function GTDR_HelpTextCloseMiniFrame()
